@@ -1,0 +1,11 @@
+User-Agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /my-account/
+Disallow: /cart/
+Disallow: /thank-you/
+Disallow: /auth/sign-in/
+Disallow: /*globals.css
+
+Sitemap: https://www.babubangla.com/sitemap.xml

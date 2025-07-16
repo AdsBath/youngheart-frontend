@@ -1,0 +1,41 @@
+/* print.css */
+
+@media print {
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .print-container {
+        width: 210mm; /* A4 width */
+        height: 297mm; /* A4 height */
+        padding: 20mm;
+        box-sizing: border-box;
+        page-break-after: avoid;
+    }
+
+    /* Hide elements that shouldn't be printed */
+    .no-print {
+        display: none !important;
+    }
+
+    /* Adjust table styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        text-align: left;
+    }
+}
