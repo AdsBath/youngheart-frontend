@@ -483,7 +483,7 @@ export default function Navbar() {
             </div>
 
             {/* Main Navigation - Sticky */}
-            <div className="sticky top-0 z-40 bg-white border-b shadow-sm">
+            <div className="sticky top-0 z-40 bg-white border-b shadow-sm ">
                 <div className="container mx-auto px-4">
                     <div className="flex items-center justify-between py-4">
                         {/* Logo */}
