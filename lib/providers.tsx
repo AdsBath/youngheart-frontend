@@ -21,7 +21,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <Provider store={store}>
       <Toaster />
-      <NextTopLoader />
+      <NextTopLoader color="#f81818" showSpinner={false} />
       {children}
     </Provider>
   );
