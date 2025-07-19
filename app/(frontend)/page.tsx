@@ -9,11 +9,11 @@ import type { Metadata } from "next";
 
 // Metadata for SEO optimization
 export const metadata: Metadata = {
-    title: "Babukhushi | Extensive Collection Exceptional Care",
+    title: "Youngheart | Your One-Stop Shop for  Bags",
     description:
-        "Discover premium quality babu bags and accessories at babukhushikhushi the best collection of babu goods crafted with precision.",
+        "",
     keywords:
-        "babu bags, babu accessories, premium babu, babukhushi, babukhushi",
+        "youngheart, online shopping, ecommerce, discounts, offers, product features, collections",
 };
 
 const fetchData = async (params: string) => {
@@ -27,6 +27,7 @@ const fetchData = async (params: string) => {
         console.error("Error fetching data:", error);
     }
 };
+
 const Home = async () => {
     const herobannerResponse = await fetchData("/banner");
     const { data: herobannerData } = herobannerResponse || {};

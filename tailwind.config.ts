@@ -18,6 +18,10 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", "sans-serif"], // Fira Sans Body Text
+        alt: ["var(--font-alt)", "sans-serif"], // Manrope Headings
+      },
       fontSize: {
         h1: "3rem",
         h2: "2.5rem",
@@ -27,8 +31,8 @@ const config = {
         h6: "1.25rem",
       },
       colors: {
-        brand: "#00706b",
-        bandBlack: "#045d59",
+        brand: "#f97316", // Vibrant Orange (like Tailwind's orange-500)
+        brandBlack: "#9a3412", // Deep Burnt Orange / Dark Orange (like orange-900)
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -20,14 +20,14 @@ const CustomCarousel = ({ bannerData }: any = {}) => {
     };
 
     return (
-        <section className="h-[185px] md:h-[350px] lg:h-[600px]">
+        <section className="h-[185px] md:h-[80vh]">
             {bannerData?.length === 0 ? (
                 <div className="w-full h-full bg-gray-200 animate-pulse"></div>
             ) : (
                 <Carousel
                     plugins={[plugin.current]}
                     className="w-full h-full"
-                    opts={{ loop: true, align: "start" }}
+                    opts={{ loop: false, align: "start" }}
                 >
                     <CarouselContent className="w-full h-full">
                         {bannerData?.map((bannerItem: any) => (
