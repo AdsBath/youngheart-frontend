@@ -51,7 +51,7 @@ const Home = async () => {
         <>
             {/* Above-the-fold components */}
             <CustomCarousel bannerData={herobannerData?.data} />
-            <ProductCategory categoriesData={featureCategoryData?.data} />
+            {/* <ProductCategory categoriesData={featureCategoryData?.data} /> */}
 
             {/* Below-the-fold components */}
             <OfferPage
