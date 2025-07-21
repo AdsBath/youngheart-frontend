@@ -12,7 +12,7 @@ import Link from "next/link";
 import { memo, useRef, useState } from "react";
 
 const CustomCarousel = ({ bannerData }: any = {}) => {
-    const plugin = useRef(Autoplay({ delay: 4000 }));
+    const plugin = useRef(Autoplay({ delay: 8000 }));
     const [loaded, setLoaded] = useState<{ [key: string]: boolean }>({});
 
     const handleImageLoad = (id: string) => {
@@ -20,19 +20,19 @@ const CustomCarousel = ({ bannerData }: any = {}) => {
     };
 
     return (
-        <section className="h-[185px] md:h-[80vh]">
+        <section className="h-[185px] md:h-[85vh]">
             {bannerData?.length === 0 ? (
                 <div className="w-full h-full bg-gray-200 animate-pulse"></div>
             ) : (
                 <Carousel
                     plugins={[plugin.current]}
                     className="w-full h-full"
-                    opts={{ loop: false, align: "start" }}
+                    opts={{ loop: true, align: "start" }}
                 >
                     <CarouselContent className="w-full h-full">
                         {bannerData?.map((bannerItem: any) => (
                             <CarouselItem
-                                className="pb-10"
+                                className="pb-0 px-0"
                                 key={bannerItem?.id}
                             >
                                 <div className="w-full h-full relative">
