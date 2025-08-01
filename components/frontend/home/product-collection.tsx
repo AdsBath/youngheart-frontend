@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import dynamic from "next/dynamic";
 import React, { useMemo } from "react";
 import ProductCard from "../product-card";
+import type { CarouselApi } from "@/components/ui/carousel";
 
 const Banner = dynamic(() => import("./banner"), { ssr: false });
 
@@ -55,7 +56,7 @@ const ProductCollection = ({ collections }: any) => {
               <h2 className="text-xl md:text-4xl font-semibold mb-2 font-alt">
                 {item.collectionName.toUpperCase()}
               </h2>
-              <div className="px-5">
+              <div className="md:px-5">
                 <ProductCarousel products={item.products} />
               </div>
             </section>
@@ -73,31 +74,76 @@ const ProductCollection = ({ collections }: any) => {
 export default React.memo(ProductCollection);
 
 export const ProductCarousel = ({ products }: any) => {
+  const [api, setApi] = React.useState<CarouselApi>();
+  const [current, setCurrent] = React.useState(0);
+  const [count, setCount] = React.useState(0);
+
+  // Filter published products
+  const publishedProducts = products.filter(
+    (product: any) => product.status === "published"
+  );
+
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1);
+    });
+  }, [api]);
+
+  const scrollTo = (index: number) => {
+    api?.scrollTo(index);
+  };
+
   return (
-    <Carousel
-      opts={{
-        align: "start",
-        loop: true,
-      }}
-      className="max-w-full"
-    >
-      <CarouselContent>
-        {products
-          .filter((product: any) => product.status === "published")
-          ?.map((product: any) => (
+    <div className="w-full">
+      <Carousel
+        setApi={setApi}
+        opts={{
+          align: "start",
+          loop: true,
+        }}
+        className="max-w-full"
+      >
+        <CarouselContent>
+          {publishedProducts?.map((product: any) => (
             <CarouselItem
               key={product.id}
-              className="basis-[42%] md:basis-[35%] lg:basis-[19%] pl-2"
+              className="basis-[80%] md:basis-[35%] lg:basis-[19%] pl-2"
             >
               <div className="h-full">
                 <ProductCard product={product} />
               </div>
             </CarouselItem>
           ))}
-      </CarouselContent>
-      <CarouselPrevious className="-left-8  border-none rounded-xs bg-black text-white " />
-      <CarouselNext className="-right-8 border-none rounded-xs bg-black text-white" />
-    </Carousel>
+        </CarouselContent>
+        <CarouselPrevious className="-left-8 border-none rounded-xs bg-black text-white hidden md:flex" />
+        <CarouselNext className="-right-8 border-none rounded-xs bg-black text-white hidden md:flex" />
+      </Carousel>
+
+      {/* Navigation Dots */}
+      {count > 1 && (
+        <div className="flex justify-center space-x-2 mt-4">
+          {Array.from({ length: count }).map((_, index) => (
+            <button
+              key={index}
+              className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                index + 1 === current
+                  ? "bg-black dark:bg-white"
+                  : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
+              }`}
+              onClick={() => scrollTo(index)}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -21,7 +21,7 @@ const Banner = ({
 }: BannerProps) => {
   return (
     <section>
-      <div className="w-full relative aspect-square overflow-hidden">
+      <div className="w-full relative md:max-h-[800px] aspect-square overflow-hidden">
         <Image
           src={url}
           fill

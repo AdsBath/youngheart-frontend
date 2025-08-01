@@ -129,76 +129,78 @@
 
 // export default ProductCard;
 
+"use client";
 
-"use client"
+import type React from "react";
 
-import type React from "react"
-
-import { useAuth } from "@/context/AuthContext"
-import { cn } from "@/lib/utils"
-import { useCreateWishlistMutation, useMyWishlistQuery } from "@/redux/api/wishlistApi"
-import { calculateDiscount } from "@/utils/calculateDiscount"
-import { IconHeart, IconHeartFilled } from "@tabler/icons-react"
-import Image from "next/image"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
-import { useDispatch } from "react-redux"
-import { useCookies } from "react-cookie"
-import { removeCommas } from "@/utils/removeCommas"
-import { addItemToCart, onCartOpen } from "@/redux/features/cart/cartSlice"
-import { useCreateCartMutation } from "@/redux/api/cartApi"
+import { useAuth } from "@/context/AuthContext";
+import { cn } from "@/lib/utils";
+import {
+  useCreateWishlistMutation,
+  useMyWishlistQuery,
+} from "@/redux/api/wishlistApi";
+import { calculateDiscount } from "@/utils/calculateDiscount";
+import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+import { useCookies } from "react-cookie";
+import { removeCommas } from "@/utils/removeCommas";
+import { addItemToCart, onCartOpen } from "@/redux/features/cart/cartSlice";
+import { useCreateCartMutation } from "@/redux/api/cartApi";
 
 type ProductCardProps = {
   product: {
-    id: string
-    name: string
-    shortDescription: string
-    thumbnail: string
-    price: number
-    discountPrice?: number
-    isAvailable: string
-    bundleDiscount?: { name: string }
-    slug: string
-    colors?: string[]
-    tags?: string[],
-    sku?: string,
-    quantity?: number
-    selectedImage?: string
-  }
-}
+    id: string;
+    name: string;
+    shortDescription: string;
+    thumbnail: string;
+    price: number;
+    discountPrice?: number;
+    isAvailable: string;
+    bundleDiscount?: { name: string };
+    slug: string;
+    colors?: string[];
+    tags?: string[];
+    sku?: string;
+    quantity?: number;
+    selectedImage?: string;
+  };
+};
 
 const ProductCard = ({ product }: any) => {
-  const [loadedImg, setLoadedImg] = useState(false)
-  const [createWishlist] = useCreateWishlistMutation()
+  const [loadedImg, setLoadedImg] = useState(false);
+  const [createWishlist] = useCreateWishlistMutation();
   const [createCart] = useCreateCartMutation();
   const [cookie, setCookie] = useCookies(["sessionId"]);
-  const { user, loading } = useAuth()
+  const { user, loading } = useAuth();
   const dispatch = useDispatch();
-  const { data } = useMyWishlistQuery(user?.id)
-  const router = useRouter()
+  const { data } = useMyWishlistQuery(user?.id);
+  const router = useRouter();
 
   const handleWishlist = async (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
 
     if (!user) {
-      router.push("/my-account")
-      return
+      router.push("/my-account");
+      return;
     }
 
     const wishlistData = {
       userId: user?.id,
       productId: product?.id,
-    }
+    };
 
-    const res = await createWishlist(wishlistData)
+    const res = await createWishlist(wishlistData);
     if (res?.data?.statusCode === 200 && res?.data?.success) {
-      toast.success(res?.data?.message)
+      toast.success(res?.data?.message);
     }
-  }
+  };
 
   const handleAddToCart = async () => {
     const data: any = {
@@ -211,8 +213,8 @@ const ProductCard = ({ product }: any) => {
       discountAmmount:
         parseFloat(product?.discountPrice) > 0
           ? (parseFloat(removeCommas(product?.price)) *
-            parseFloat(product?.discountPrice)) /
-          100
+              parseFloat(product?.discountPrice)) /
+            100
           : 0,
       discount:
         parseFloat(product?.discountPrice) > 0
@@ -237,21 +239,24 @@ const ProductCard = ({ product }: any) => {
     }
   };
 
-
   const isInWishlist = data?.data?.data?.some(
-    (item: any) => item?.userId === user?.id && item?.productId === product?.id,
-  )
+    (item: any) => item?.userId === user?.id && item?.productId === product?.id
+  );
 
   return (
     <div className="group relative bg-white rounded-lg overflow-hidden transition-all duration-300 ">
       {/* Image Container */}
       <div className="relative aspect-[3/4] overflow-hidden bg-[#f4f4f4]">
-        <link rel="preload" as="image" href={product.thumbnail || "https://via.placeholder.com/400x533"} />
+        <link
+          rel="preload"
+          as="image"
+          href={product.thumbnail || "https://via.placeholder.com/400x533"}
+        />
         <Image
           fill
           className={cn(
             "object-cover transition-all duration-500 group-hover:scale-105",
-            loadedImg ? "blur-none" : "blur-md",
+            loadedImg ? "blur-none" : "blur-md"
           )}
           onLoad={() => setLoadedImg(true)}
           alt={product?.name}
@@ -288,12 +293,11 @@ const ProductCard = ({ product }: any) => {
         {/* Action Buttons - Only show on hover and when in stock */}
         {product?.isAvailable !== "outOfStock" && (
           <div className="absolute bottom-0 left-0 right-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <div className="flex items-center justify-center gap-4 p-2 text-sm">
-
+            <div className="flex items-center justify-center  md:gap-4 md:p-2">
               {/* Add to Bag Button */}
               <button
                 onClick={handleAddToCart}
-                className="px-1 py-3 text-white "
+                className="px-1 py-3 text-white text-xs"
               >
                 ADD TO BAG
               </button>
@@ -303,27 +307,34 @@ const ProductCard = ({ product }: any) => {
 
               {/* Quick View Button */}
               <Link href={`/product/${product.slug}?view=quick`} passHref>
-                <button className="px-1 py-3 text-white ">
+                <button className="px-1 py-3 text-white text-xs">
                   QUICK VIEW
                 </button>
               </Link>
-
             </div>
           </div>
         )}
-
       </div>
       {/* Product Info */}
       <div className="p-0.5 space-y-3">
         {/* Product Name */}
-        <h3 className="font-medium text-gray-900 text-sm leading-tight line-clam">{product?.name}</h3>
+        <h3 className="font-medium text-gray-900 text-sm leading-tight line-clam">
+          {product?.name}
+        </h3>
 
         {/* Price */}
         <div className="flex items-center gap-2">
           <span className="font-bold text-gray-900">
-            ৳ {product?.discountPrice ? calculateDiscount(product?.price, product?.discountPrice) : product?.price}
+            ৳{" "}
+            {product?.discountPrice
+              ? calculateDiscount(product?.price, product?.discountPrice)
+              : product?.price}
           </span>
-          {product?.discountPrice && <span className="text-sm text-gray-500 line-through">৳ {product?.price}</span>}
+          {product?.discountPrice && (
+            <span className="text-sm text-gray-500 line-through">
+              ৳ {product?.price}
+            </span>
+          )}
         </div>
 
         {/* Color Swatches */}
@@ -354,8 +365,7 @@ const ProductCard = ({ product }: any) => {
         )} */}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductCard
-
+export default ProductCard;
