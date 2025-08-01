@@ -327,7 +327,7 @@ const ProductCard = ({ product }: any) => {
         </div>
 
         {/* Color Swatches */}
-        {product?.colors && product.colors.length > 0 && (
+        {/* {product?.colors && product.colors.length > 0 && (
           <div className="flex items-center gap-1">
             {product.colors.slice(0, 4).map((color, index) => (
               <div
@@ -340,10 +340,10 @@ const ProductCard = ({ product }: any) => {
               <span className="text-xs text-gray-500 ml-1">+{product.colors.length - 4}</span>
             )}
           </div>
-        )}
+        )} */}
 
         {/* Tags */}
-        {product?.tags && product.tags.length > 0 && (
+        {/* {product?.tags && product.tags.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {product.tags.map((tag, index) => (
               <span key={index} className="px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 rounded border">
@@ -351,7 +351,7 @@ const ProductCard = ({ product }: any) => {
               </span>
             ))}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   )

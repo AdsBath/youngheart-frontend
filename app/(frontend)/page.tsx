@@ -1,6 +1,6 @@
 import CustomCarousel from "@/components/frontend/home/custom-carousel";
 import OfferPage from "@/components/frontend/home/offer-page";
-import ProductCategory from "@/components/frontend/home/product-category";
+// import ProductCategory from "@/components/frontend/home/product-category";
 import ProductCollection from "@/components/frontend/home/product-collection";
 import Features from "@/components/frontend/home/product-feature";
 import ScrollToTopButton from "@/components/frontend/home/scroll-to-top-button";
