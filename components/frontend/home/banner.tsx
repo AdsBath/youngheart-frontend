@@ -8,8 +8,7 @@ interface BannerProps {
   url: string;
   id: string;
   title?: string;
-  category?: string;
-  categoryLink?: string;
+  category?: any;
 }
 
 const Banner = ({
@@ -17,7 +16,6 @@ const Banner = ({
   id,
   title = "QUALITY FLEECE",
   category = "MEN’S SWEATS",
-  categoryLink = "/category/mens-sweats",
 }: BannerProps) => {
   return (
     <section>
@@ -37,15 +35,15 @@ const Banner = ({
             className="text-white text-xs md:text-base font-semibold tracking-wide mb-2"
             style={{ letterSpacing: "0.05em" }}
           >
-            {category}
+            {category?.title || "Belt"}
           </p>
           {/* Title */}
           <h2 className="text-white text-2xl md:text-4xl font-bold mb-6 text-center font-alt drop-shadow-lg">
-            {title}
+            {title || "QUALITY FLEECE"}
           </h2>
           {/* Category Link */}
           <Link
-            href={categoryLink}
+            href={`/category/${category?.slug || "belt"}`}
             className="text-white text-xs md:text-base font-semibold tracking-wide mb-2 hover:underline"
             style={{ letterSpacing: "0.05em" }}
           >

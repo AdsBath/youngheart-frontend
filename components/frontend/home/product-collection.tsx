@@ -23,6 +23,11 @@ interface Collection {
   productProductCollections: {
     product: Product;
   }[];
+  imageUrl2: string;
+  title: string;
+  title2: string;
+  category: any;
+  category2: any;
 }
 
 interface Product {
@@ -43,6 +48,11 @@ const ProductCollection = ({ collections }: any) => {
         collectionName: item.name,
         image: item.imageUrl,
         products: item.productProductCollections?.map((i) => i.product),
+        image2: item.imageUrl2,
+        title: item.title,
+        title2: item.title2,
+        category: item.category,
+        category2: item.category2,
       })),
     [collections]
   );
@@ -61,8 +71,18 @@ const ProductCollection = ({ collections }: any) => {
               </div>
             </section>
             <div className="grid grid-cols-1 md:grid-cols-2 mt-20">
-              <Banner url={item.image} id={item.id} />
-              <Banner url={item.image} id={item.id} />
+              <Banner
+                url={item?.image}
+                id={item?.id}
+                title={item?.title}
+                category={item?.category}
+              />
+              <Banner
+                url={item?.image2}
+                id={item?.id}
+                title={item?.title2}
+                category={item?.category2}
+              />
             </div>
           </div>
         )
@@ -114,7 +134,7 @@ export const ProductCarousel = ({ products }: any) => {
           {publishedProducts?.map((product: any) => (
             <CarouselItem
               key={product.id}
-              className="basis-[80%] md:basis-[35%] lg:basis-[19%] pl-2"
+              className="basis-[80%] md:basis-[35%] lg:basis-[24%] pl-2"
             >
               <div className="h-full">
                 <ProductCard product={product} />
