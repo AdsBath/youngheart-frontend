@@ -24,6 +24,8 @@ import {
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { MegaMenu } from "./mega-drop";
+import { useMyWishlistQuery } from "@/redux/api/wishlistApi";
+import { useRouter } from "next/navigation";
 
 interface Category {
   id: string;
@@ -192,6 +194,7 @@ export function MobileDropdown({
 }
 
 const Navbar: React.FC = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const [cookie] = useCookies(["sessionId"]);
   const sessionId = cookie?.sessionId || "";
@@ -209,6 +212,10 @@ const Navbar: React.FC = () => {
     { skip: !sessionId }
   );
   const userId = sessionData?.data?.id;
+
+  const { data: wishlistData, isLoading: wishlistLoading } =
+    useMyWishlistQuery(userId);
+  const wishlistProducts = wishlistData?.data?.data;
 
   const toggleDropdown = (dropdown: string) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
@@ -352,12 +359,17 @@ const Navbar: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="icon"
+                  onClick={() => {
+                    router.push("/my-account/my-wishlist");
+                  }}
                   className="hidden md:flex hover:text-orange-500 hover:bg-orange-50 transition-colors relative"
                 >
                   <Heart className="h-5 w-5" />
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-orange-500">
-                    2
-                  </Badge>
+                  {wishlistProducts?.length > 0 && (
+                    <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-orange-500">
+                      {wishlistProducts?.length}
+                    </Badge>
+                  )}
                 </Button>
               </motion.div>
 
