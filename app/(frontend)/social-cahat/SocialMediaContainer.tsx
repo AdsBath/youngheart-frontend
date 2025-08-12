@@ -18,7 +18,10 @@ const SocialMediaContainer = () => {
         </DialogTitle>
       </DialogHeader>
       <div className="flex items-center justify-center">
-        <WhatsAppWidget phoneNumber="+8801889175408" companyName="Babukhusi" />
+        <WhatsAppWidget
+          phoneNumber="+8801889175408"
+          companyName="youngheartbd"
+        />
         <a
           href="tel:+8801889175408"
           className="rounded-full hover:text-white hover:bg-brand text-brand mx-4 h-12 w-12 sm:h-16 sm:w-16 justify-center shadow-[0_3px_12px_#00000026] flex items-center "
