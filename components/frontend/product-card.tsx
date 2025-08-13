@@ -180,8 +180,10 @@ const ProductCard = ({ product }: any) => {
   const { user, loading } = useAuth();
   const dispatch = useDispatch();
   const { data } = useMyWishlistQuery(user?.id);
+  const [color, setColor] = useState<string>("");
+  const [size, setSize] = useState<string>("");
+  const [quantity, setQuantity] = useState<number>(1);
   const router = useRouter();
-
   const handleWishlist = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -202,11 +204,11 @@ const ProductCard = ({ product }: any) => {
     }
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (productId: string) => {
     const data: any = {
-      productId: product?.id,
-      // color,[]
-      // size,
+      productId,
+      color,
+      size,
       name: product?.name,
       sku: product?.sku,
       price: parseFloat(removeCommas(product?.price)),
@@ -220,9 +222,9 @@ const ProductCard = ({ product }: any) => {
         parseFloat(product?.discountPrice) > 0
           ? parseFloat(product?.discountPrice)
           : 0,
-      quantity: product?.quantity || 1,
+      quantity,
       sessionId: cookie.sessionId,
-      image: product?.selectedImage || product?.thumbnail,
+      image: product?.thumbnail,
     };
     dispatch(addItemToCart(data));
     dispatch(onCartOpen());
@@ -296,7 +298,7 @@ const ProductCard = ({ product }: any) => {
             <div className="flex items-center justify-center  md:gap-4 md:p-2">
               {/* Add to Bag Button */}
               <button
-                onClick={handleAddToCart}
+                onClick={() => handleAddToCart(product?.id)}
                 className="px-1 py-3 text-white text-xs"
               >
                 ADD TO BAG
