@@ -7,35 +7,35 @@ import { Metadata } from "next";
 import OrderList from "./_components/order-list";
 
 export const metadata: Metadata = {
-    title: "Orders list | Babukhusi",
-    description: "orders list page",
+  title: "Orders list | youngheartbd",
+  description: "orders list page",
 };
 export default function Order() {
-    return (
-        <Layout>
-            <ScrollArea className="h-[100vh]">
-                {/* ===== Top Heading ===== */}
-                <LayoutHeader>
-                    {/* <Search /> */}
-                    <Breadcrumbs
-                        items={[
-                            {
-                                label: "Customer",
-                                href: "/registered-customer",
-                            },
-                            { label: "Registered" },
-                        ]}
-                    />
-                    <div className="ml-auto flex items-center space-x-4">
-                        <NotificationShow />
+  return (
+    <Layout>
+      <ScrollArea className="h-[100vh]">
+        {/* ===== Top Heading ===== */}
+        <LayoutHeader>
+          {/* <Search /> */}
+          <Breadcrumbs
+            items={[
+              {
+                label: "Customer",
+                href: "/registered-customer",
+              },
+              { label: "Registered" },
+            ]}
+          />
+          <div className="ml-auto flex items-center space-x-4">
+            <NotificationShow />
 
-                        <UserNav />
-                    </div>
-                </LayoutHeader>
-                <LayoutBody>
-                    <OrderList />
-                </LayoutBody>
-            </ScrollArea>
-        </Layout>
-    );
+            <UserNav />
+          </div>
+        </LayoutHeader>
+        <LayoutBody>
+          <OrderList />
+        </LayoutBody>
+      </ScrollArea>
+    </Layout>
+  );
 }

@@ -134,7 +134,7 @@ export const ProductCarousel = ({ products }: any) => {
           {publishedProducts?.map((product: any) => (
             <CarouselItem
               key={product.id}
-              className="basis-[80%] md:basis-[35%] lg:basis-[24%] pl-2"
+              className="basis-[80%] md:basis-[35%] lg:basis-[24%] px-2"
             >
               <div className="h-full">
                 <ProductCard product={product} />
@@ -142,8 +142,8 @@ export const ProductCarousel = ({ products }: any) => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="-left-8 border-none rounded-xs bg-black text-white hidden md:flex" />
-        <CarouselNext className="-right-8 border-none rounded-xs bg-black text-white hidden md:flex" />
+        <CarouselPrevious className="-left-8 border-none rounded-xs bg-[#f97316] hover:bg-[#f97316] text-white hidden md:flex hover:text-white" />
+        <CarouselNext className="-right-8 border-none rounded-xs bg-[#f97316] hover:bg-[#f97316]  text-white hidden md:flex hover:text-white" />
       </Carousel>
 
       {/* Navigation Dots */}
