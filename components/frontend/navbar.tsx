@@ -16,7 +16,6 @@ import {
   Heart,
   MapPin,
   Menu,
-  Search,
   ShoppingBag,
   User,
   X,
@@ -26,6 +25,8 @@ import { Badge } from "../ui/badge";
 import { MegaMenu } from "./mega-drop";
 import { useMyWishlistQuery } from "@/redux/api/wishlistApi";
 import { useRouter } from "next/navigation";
+import Search from "../search";
+import { IconSearch } from "@tabler/icons-react";
 
 interface Category {
   id: string;
@@ -348,7 +349,7 @@ const Navbar: React.FC = () => {
                   className="hidden md:flex hover:text-orange-500 hover:bg-orange-50 transition-colors"
                   onClick={() => setIsSearchOpen(!isSearchOpen)}
                 >
-                  <Search className="h-5 w-5" />
+                  <IconSearch className="h-5 w-5" />
                 </Button>
               </motion.div>
 
@@ -441,13 +442,15 @@ const Navbar: React.FC = () => {
                   onClick={() => setIsSearchOpen(false)}
                 />
                 <div className="relative w-96">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  {/* TODO: Search functionality */}
+                  {/* <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <input
                     type="text"
                     placeholder="Search products..."
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                     autoFocus
-                  />
+                  /> */}
+                  <Search />
                 </div>
               </motion.div>
             )}
