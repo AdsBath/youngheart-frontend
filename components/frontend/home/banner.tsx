@@ -43,7 +43,7 @@ const Banner = ({
           </h2>
           {/* Category Link */}
           <Link
-            href={`/category/${category?.slug || "belt"}`}
+            href={`/all-product/${category?.slug || "belt"}`}
             className="text-white text-xs md:text-base font-semibold tracking-wide mb-2 hover:underline"
             style={{ letterSpacing: "0.05em" }}
           >
