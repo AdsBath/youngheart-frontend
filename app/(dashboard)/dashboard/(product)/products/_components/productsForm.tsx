@@ -838,7 +838,7 @@ export default function ProductsForm({ productData }: ProductsFormProps) {
                       ) : (
                         <Skeleton className="h-9 w-full" />
                       )}
-                      <FormField
+                      {/* <FormField
                         control={form.control}
                         name="showInOffer"
                         render={({ field }) => (
@@ -848,11 +848,6 @@ export default function ProductsForm({ productData }: ProductsFormProps) {
                             </FormLabel>
 
                             <FormControl>
-                              {/* <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                defaultChecked={productData?.showInOffer}
-                              /> */}
                               <input
                                 type="checkbox"
                                 onChange={(e) => setShowInOffer(!showInOffer)}
@@ -861,7 +856,7 @@ export default function ProductsForm({ productData }: ProductsFormProps) {
                             </FormControl>
                           </FormItem>
                         )}
-                      />
+                      /> */}
                     </div>{" "}
                     <div className="grid gap-1 sm:grid-cols-2">
                       {!productCollectionsLoading ? (
@@ -902,13 +897,6 @@ export default function ProductsForm({ productData }: ProductsFormProps) {
                               </FormLabel>
 
                               <FormControl>
-                                {/* <Switch
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                  defaultChecked={
-                                    productData?.showInHomeCollection
-                                  }
-                                /> */}
                                 <input
                                   type="checkbox"
                                   onChange={(e) =>
