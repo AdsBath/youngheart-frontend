@@ -4,7 +4,6 @@ import Analytics from "@/components/dashboard/analytics";
 import { NotificationShow } from "@/components/dashboard/notification-show";
 import Overview from "@/components/dashboard/overview";
 import Reports from "@/components/dashboard/reports";
-import { ThemeSwitch } from "@/components/theme-switch";
 
 import { TopNav } from "@/components/top-nav";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
