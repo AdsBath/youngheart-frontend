@@ -7,8 +7,6 @@ import Image from "next/image";
 const MyOrderList = () => {
   const { data, isLoading } = useMyOrderQuery({});
 
-  console.log({ data });
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":

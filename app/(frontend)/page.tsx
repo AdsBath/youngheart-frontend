@@ -15,20 +15,19 @@ export const metadata: Metadata = {
     "youngheart, online shopping, ecommerce, discounts, offers, product features, collections",
 };
 
-const fetchData = async (params: string) => {
+// Generic fetch helper with graceful failure (no console noise on server)
+async function fetchData<T = any>(path: string): Promise<T | null> {
   try {
-    const response = await fetch(BASE_URL + params, {
-      next: { revalidate: 30 },
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
+    const res = await fetch(`${BASE_URL}${path}`, { next: { revalidate: 30 } });
+    if (!res.ok) return null;
+    return (await res.json()) as T;
+  } catch {
+    return null; // swallow error to avoid SSR console spam
   }
-};
+}
 
 const Home = async () => {
-  const herobannerResponse = await fetchData("/banner");
+  const herobannerResponse = await fetchData<any>("/banner");
   const { data: herobannerData } = herobannerResponse || {};
 
   //   const offerBannerResponse = await fetchData("/discount-banner/frontend");
@@ -40,10 +39,10 @@ const Home = async () => {
   // const featuresResponse = await fetchData("/feature");
   // const { data: featuresData } = featuresResponse || {};
 
-  const featureCategoryResponse = await fetchData("/categories/featured");
+  const featureCategoryResponse = await fetchData<any>("/categories/featured");
   const { data: featureCategoryData } = featureCategoryResponse || {};
 
-  const productCollectionResponse = await fetchData("/product-collection");
+  const productCollectionResponse = await fetchData<any>("/product-collection");
   const { data: productCollectionData } = productCollectionResponse || {};
 
   return (

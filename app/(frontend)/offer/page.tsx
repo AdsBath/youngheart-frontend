@@ -2,25 +2,20 @@ import BlurImg from "@/components/custom/blur-img";
 import Offer from "@/components/frontend/offer/offer-on-page";
 import { BASE_URL } from "@/utils/base-url";
 
-const fetchData = async (params: string) => {
+async function fetchData<T = any>(path: string): Promise<T | null> {
   try {
-    const response = await fetch(BASE_URL + params, {
-      next: { revalidate: 30 },
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
+    const res = await fetch(`${BASE_URL}${path}`, { next: { revalidate: 30 } });
+    if (!res.ok) return null;
+    return (await res.json()) as T;
+  } catch {
+    return null;
   }
-};
+}
 
 const OfferOnPage = async () => {
-  const response = await fetchData("/discount-banner/frontend");
-
+  const response = await fetchData<any>("/discount-banner/frontend");
   const { data } = response || {};
-
-  const offerProductResponse = await fetchData("/products/all-offer-product");
-
+  const offerProductResponse = await fetchData<any>("/products/all-offer-product");
   const { data: offerProductData } = offerProductResponse || {};
 
   return (
@@ -32,7 +27,6 @@ const OfferOnPage = async () => {
           className="w-full h-[180px] md:h-[450px] object-cover rounded-none"
         />
       </div>
-
       <Offer offerProductData={offerProductData} />
     </div>
   );

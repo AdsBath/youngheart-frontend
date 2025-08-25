@@ -50,7 +50,6 @@ export function MegaMenu({ category }: { category: Category }) {
                if (timeoutRef.current) clearTimeout(timeoutRef.current)
           }
      }, [])
-     console.log(category, ">>>>>>>>>>>>>>>>>>>category in mega menu");
      return (
           <div className="relative" onMouseEnter={openMenu} onMouseLeave={closeMenu}>
                {/* Trigger Button */}

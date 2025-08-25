@@ -57,8 +57,8 @@ const ProductDetails = ({ product }: { product: any }) => {
       discountAmmount:
         parseFloat(product?.discountPrice) > 0
           ? (parseFloat(removeCommas(product?.price)) *
-              parseFloat(product?.discountPrice)) /
-            100
+            parseFloat(product?.discountPrice)) /
+          100
           : 0,
       discount:
         parseFloat(product?.discountPrice) > 0
@@ -84,7 +84,6 @@ const ProductDetails = ({ product }: { product: any }) => {
   };
 
   const handleBuyNow = async (productId: string) => {
-    console.log(productId);
     setBuyLoading(true);
     const data = {
       productId,
@@ -94,8 +93,8 @@ const ProductDetails = ({ product }: { product: any }) => {
       discountAmmount:
         parseFloat(product?.discountPrice) > 0
           ? (parseFloat(removeCommas(product?.price)) *
-              parseFloat(product?.discountPrice)) /
-            100
+            parseFloat(product?.discountPrice)) /
+          100
           : 0,
       discount:
         parseFloat(product?.discountPrice) > 0

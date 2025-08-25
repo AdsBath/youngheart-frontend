@@ -34,7 +34,6 @@ const featureSlice = createSlice({
       state.editFeatureSheet.id = undefined;
     },
     onFeatureOpen: (state) => {
-      console.log("onFeatureOpen");
       state.newFeatureSheet.isOpen = true;
     },
     onCloseFeature: (state) => {

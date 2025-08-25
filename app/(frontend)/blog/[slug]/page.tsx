@@ -9,7 +9,6 @@ const BlogDetailsPage = ({
   params: { slug: string };
 }) => {
   const { data, isLoading } = useGetBlogBySlugQuery(slug);
-  console.log({ data });
   return (
     <div>
       {isLoading ? (
