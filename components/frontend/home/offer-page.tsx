@@ -73,16 +73,16 @@ const OfferPage = ({ offerProductData, bannerData }: any) => {
                         <CarouselContent>
                             {!offerProductData?.length
                                 ? [...Array(4)]?.map((_, index) => (
-                                      <SkeletonItem key={index} />
-                                  ))
+                                    <SkeletonItem key={index} />
+                                ))
                                 : offerProductData?.map((product: Product) => (
-                                      <CarouselItem
-                                          key={product.id}
-                                          className="basis-[42%] md:basis-[35%] lg:basis-[19%] pl-2"
-                                      >
-                                          <ProductCard product={product} />
-                                      </CarouselItem>
-                                  ))}
+                                    <CarouselItem
+                                        key={product.id}
+                                        className="basis-[42%] md:basis-[35%] lg:basis-[19%] pl-2"
+                                    >
+                                        <ProductCard product={product as any} />
+                                    </CarouselItem>
+                                ))}
                         </CarouselContent>
                         <CarouselPrevious className="left-3 text-brand hidden md:block" />
                         <CarouselNext className="right-3 text-brand hidden md:block" />

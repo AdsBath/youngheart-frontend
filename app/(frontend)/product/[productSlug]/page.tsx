@@ -16,7 +16,7 @@ export async function generateMetadata({
 
   if (!product?.data) {
     return {
-      title: "Product not found | babuBangla",
+      title: "Product not found | youngheartbd",
       description: "The product you're looking for is not available.",
     };
   }
@@ -24,7 +24,7 @@ export async function generateMetadata({
   const productName = product.data.name;
   const productDescription =
     product.data.shortDescription ||
-    "High-quality babu products available at babuBangla.";
+    "High-quality youngheart products available at youngheartbd.";
 
   const metaTitle = product.data.metaTitle || productName;
   const metaDescription = product.data.metaDescription || productDescription;
@@ -36,11 +36,11 @@ export async function generateMetadata({
       " "
     )} ,${productName.split(" ")}, ${productDescription.split(
       " "
-    )}, Babukushi, one-stop shop for kids' essentials! Browse our selection of must-have products that help your child grow and thrive. Shop easily from the comfort of your home!`,
+    )}, youngheartbd, one-stop shop for kids' essentials! Browse our selection of must-have products that help your child grow and thrive. Shop easily from the comfort of your home!`,
     openGraph: {
       title: productName,
       description: productDescription,
-      url: `https://babubangla.com/product/${productSlug}`,
+      url: `https://youngheartbd.com/product/${productSlug}`,
       images: [product.data.thumbnail],
     },
   };

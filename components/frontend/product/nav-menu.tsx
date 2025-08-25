@@ -1,5 +1,4 @@
 import React from "react";
-import { ManBagDropdown } from "../navbar-dropdown";
 import Link from "next/link";
 import { useMenuCategoriesQuery } from "@/redux/api/categoriesApi";
 
@@ -51,14 +50,14 @@ const NavMenu = () => {
   return (
     <>
       <nav className="flex gap-5 text-sm">
-        {dropdownMenu?.map((item: any, index: number) => (
+        {/* {dropdownMenu?.map((item: any, index: number) => (
           <ManBagDropdown
             key={index}
             title={item?.title}
             slug={item?.slug}
             items={item?.children}
           />
-        ))}
+        ))} */}
         {dropdown?.map((item: any, index: number) => (
           <Link
             className="border-b-2 border-[#030712] hover:border-[#FF7E26] transition-all duration-200"

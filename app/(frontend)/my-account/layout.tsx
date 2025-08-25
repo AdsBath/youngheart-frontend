@@ -48,7 +48,10 @@ export default function AccountLayout({ children }: Readonly<RootLayoutProps>) {
 
   return (
     <div className="md:container mx-auto px-2 flex w-full py-5 lg:flex-row flex-col gap-5">
-      {(user?.role === Role.USER || user?.role === Role.GUEST) && (
+      {(user?.role === Role.USER ||
+        user?.role === Role.GUEST ||
+        user?.role === Role.ADMIN ||
+        user?.role === Role.SUPER_ADMIN) && (
         <aside className="sticky top-20 md:w-[150px] lg:w-[300px] h-full hidden lg:block">
           {loading ? <Loading /> : <SidebarNav items={sidebarNavItems} />}
         </aside>

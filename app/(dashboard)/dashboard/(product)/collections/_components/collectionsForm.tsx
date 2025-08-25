@@ -30,6 +30,14 @@ import {
   onCloseProductCollection,
 } from "@/redux/features/productCollection/productCollectionSlice";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useAllCategoriesQuery } from "@/redux/api/categoriesApi";
 
 const collectionsFormSchema = z.object({
   name: z.string({
@@ -45,6 +53,11 @@ const collectionsFormSchema = z.object({
     message: "Title should be at least 4 characters long.",
   }),
   status: z.boolean().default(false),
+  imageUrl2: z.string().optional(),
+  title: z.string().optional(),
+  title2: z.string().optional(),
+  categoryId: z.string().optional(),
+  categoryId2: z.string().optional(),
 });
 
 type CollectionsFormValues = z.infer<typeof collectionsFormSchema>;
@@ -71,6 +84,9 @@ export default function CollectionsForm({
     { isLoading: updateProductCollectionLoading },
   ] = useUpdateProductCollectionMutation();
   const dispatch = useDispatch();
+
+  const { data: categoriesData, isLoading: categoriesLoading } =
+    useAllCategoriesQuery({});
 
   const form = useForm<CollectionsFormValues>({
     resolver: zodResolver(collectionsFormSchema),
@@ -115,7 +131,10 @@ export default function CollectionsForm({
       }
     }
   }
-
+  const categoriesList = categoriesData?.data?.data?.map((category: any) => ({
+    id: category.id,
+    title: category.title,
+  }));
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -183,38 +202,131 @@ export default function CollectionsForm({
             </FormItem>
           )}
         />
-        {/* <FormField
+        <FormField
           control={form.control}
-          name="name"
+          name="title"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Product Collection Title <span className="text-red-500">*</span>
+                Banner Title <span className="text-red-500">*</span>
               </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <Input placeholder="c.g banner title" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* categoryId select 1 */}
+        <FormField
+          control={form.control}
+          name="categoryId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Product Category 1 &nbsp;
+                <span className="text-red-500"> *</span>
+              </FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value || ""}
+              >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select collection" />
+                    <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {collectionData?.map(
-                    (collectionItem: ICollectionData, index: number) => (
-                      <SelectItem key={index} value={collectionItem?.value}>
-                        {collectionItem?.label}
-                      </SelectItem>
-                    )
-                  )}
+                  <SelectItem value={"null"}>No Category</SelectItem>
+                  {categoriesList?.map((category: any) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.title}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="imageUrl2"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Banner Ad Image 2 <span className="text-red-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <ImageUpload
+                  value={field.value || ""}
+                  onChange={(image) => field.onChange(image)}
+                  onRemove={() => field.onChange("")}
+                />
+              </FormControl>
               <FormDescription>
-                Product collection title should be unique. This will be used to
-                identify the collection.
+                This is the image of your banner ad 2. The image should be at
+                least
+                <strong className="text-blue-600"> 1080x1080 pixels.</strong>
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
-        /> */}
+        />
+
+        <FormField
+          control={form.control}
+          name="title2"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Banner Title <span className="text-red-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="c.g banner title" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* categoryId2 select 2 */}
+        <FormField
+          control={form.control}
+          name="categoryId2"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Product Category 2 &nbsp;
+                <span className="text-red-500"> *</span>
+              </FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value || ""}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value={"null"}>No Category</SelectItem>
+                  {categoriesList?.map((category: any) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="status"

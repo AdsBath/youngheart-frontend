@@ -21,7 +21,7 @@ export const ShareButtons = ({ shareUrl }: { shareUrl: string }) => {
 
   return (
     <div className="flex gap-4 items-center mt-5">
-      <FacebookShareButton url={shareUrl} hashtag="#babubangla">
+      <FacebookShareButton url={shareUrl} hashtag="#youngheartbd">
         <FacebookIcon size={40} round borderRadius={10} />
       </FacebookShareButton>
       <WhatsappShareButton url={shareUrl} title="Check out this product!">
