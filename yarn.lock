@@ -5627,7 +5627,7 @@ nextjs-toploader@^1.6.12:
     nprogress "^0.2.0"
     prop-types "^15.8.1"
 
-node-base64@^0.0.1, node-base64@0.0.1:
+node-base64@0.0.1:
   version "0.0.1"
   resolved "https://registry.npmjs.org/node-base64/-/node-base64-0.0.1.tgz"
   integrity sha512-lzWZQXvK7O1g5aKPCTYQJFGJc3MToEMlGmhXN+2UtkRYQz0OiWHoSMkfqQedUYCwWnixvsauH/IFsaFkrspjYQ==

@@ -1,14 +1,20 @@
+# Use official Node.js 20 Alpine image
 FROM node:20-alpine3.18
 
+# Set working directory
 WORKDIR /app
 
-COPY package*.json yarn.lock ./
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-RUN yarn install
+# Install dependencies
+RUN npm install
 
+# Copy the rest of the application
 COPY . .
 
+# Expose application port
 EXPOSE 3000
 
-CMD ["yarn", "start"]
-
+# Start the app
+CMD ["npm", "start"]
