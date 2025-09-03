@@ -16,7 +16,7 @@ export default function AppShell({
   }
 
   return (
-    <div className="relative h-full overflow-hidden bg-background">
+    <div className="relative h-full bg-background">
       <Sidebar
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
@@ -24,9 +24,8 @@ export default function AppShell({
       />
       <main
         id="content"
-        className={`overflow-x-hidden pt-16 transition-[margin] md:overflow-y-hidden md:pt-0 ${
-          isCollapsed ? "md:ml-14" : "md:ml-64"
-        } h-full`}
+        className={`transition-[margin] md:pt-0 ${isCollapsed ? "md:ml-14" : "md:ml-64"
+          } h-full`}
       >
         {children}
       </main>
