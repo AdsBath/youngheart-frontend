@@ -5,7 +5,8 @@ import Image from "next/image"
 import { useCallback, useRef, useState } from "react"
 import { useReactToPrint } from "react-to-print"
 
-const money = (v: any) => {
+// Utility to format currency
+const money = (v: unknown) => {
     const num = Number(v || 0)
     return `৳${num.toFixed(2)}`
 }
@@ -16,7 +17,7 @@ interface OrderItem {
     color?: string
     size?: string
     price: number
-    discountAmmount?: number
+    discountAmount?: number
     productName?: string
     productSku?: string
     productImage?: string
@@ -31,7 +32,7 @@ interface OrderData {
     shipToDifferentAddress?: string | null
     shippingCharge?: number
     discount?: number | null
-    discountAmmount?: number | null
+    discountAmount?: number | null
     totalAmount?: number
     orderItems?: OrderItem[]
     user?: {
@@ -53,6 +54,7 @@ const OrderView = ({ orderData }: { orderData?: OrderData | null }) => {
         content: () => componentRef.current,
     })
 
+    // Normalize and compute totals
     const rawItems = Array.isArray(orderData?.orderItems) ? orderData!.orderItems! : []
     const items: OrderItem[] = rawItems.filter(Boolean)
     const subtotal = items.reduce(
@@ -60,96 +62,123 @@ const OrderView = ({ orderData }: { orderData?: OrderData | null }) => {
         0
     )
     const lineDiscount = items.reduce(
-        (acc, it) => acc + Number((it as any)?.discountAmmount || 0),
+        (acc, it) => acc + Number(it?.discountAmount || 0),
         0
     )
     const orderLevelDiscount = Number(
-        orderData?.discountAmmount || orderData?.discount || 0
+        orderData?.discountAmount || orderData?.discount || 0
     )
     const totalDiscount = lineDiscount > 0 ? lineDiscount : orderLevelDiscount
     const shipping = Number(orderData?.shippingCharge || 0)
     const payable = subtotal - totalDiscount + shipping
 
-    const OrderItemRow = useCallback(({ item, index }: { item: OrderItem; index: number }) => {
-        const lineSubtotal = Number(item?.price || 0) * Number(item?.quantity || 0)
-        const discount = Number((item as any)?.discountAmmount || 0)
-        const lineTotal = lineSubtotal - discount
+    // Row component memoized
+    const OrderItemRow = useCallback(
+        ({ item, index }: { item: OrderItem; index: number }) => {
+            const lineSubtotal = Number(item?.price || 0) * Number(item?.quantity || 0)
+            const discount = Number(item?.discountAmount || 0)
+            const lineTotal = lineSubtotal - discount
 
-        return (
-            <tr key={item.id} className="border-t *:*:px-3 *:*:py-2 align-top">
-                <td>{index + 1}</td>
-                <td className="max-w-[220px]">
-                    <div className="flex gap-2">
-                        <Image
-                            width={60}
-                            height={60}
-                            alt={item.productName || item.product?.name || "product"}
-                            className="h-10 w-10 rounded object-cover border p-1"
-                            src={item.productImage || item.product?.thumbnail || "/placeholder.png"}
-                        />
-                        <div className="space-y-0.5">
-                            <p className="font-medium leading-snug">{item.productName || item.product?.name}</p>
-                            <p className="text-[10px] text-gray-500">SKU: {item.productSku || item.product?.sku || "N/A"}</p>
-                            {(item.color || item.size) && (
-                                <p className="text-[10px] text-gray-500">
-                                    {item.color || "—"} {item.size && <>| {item.size}</>}
-                                </p>
-                            )}
+            return (
+                <tr key={item.id} className="border-t *:*:px-3 *:*:py-2 align-top">
+                    <td>{index + 1}</td>
+                    <td className="max-w-[220px]">
+                        <div className="flex gap-2">
+                            <Image
+                                width={60}
+                                height={60}
+                                alt={item.productName || item.product?.name || "product"}
+                                className="h-10 w-10 rounded object-cover border p-1"
+                                src={item.productImage || item.product?.thumbnail || "/placeholder.png"}
+                                unoptimized
+                                priority
+                            />
+                            <div className="space-y-0.5">
+                                <p className="font-medium leading-snug">{item.productName || item.product?.name}</p>
+                                <p className="text-[10px] text-gray-500">SKU: {item.productSku || item.product?.sku || "N/A"}</p>
+                                {(item.color || item.size) && (
+                                    <p className="text-[10px] text-gray-500">
+                                        {item.color || "—"} {item.size && <>| {item.size}</>}
+                                    </p>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                </td>
-                <td className="text-center">{item.quantity}</td>
-                <td className="text-right">{money(item.price)}</td>
-                <td className="text-right text-red-600">{discount ? `-${money(discount)}` : "-"}</td>
-                <td className="text-right font-medium">
-                    {money(lineTotal)}
-                    {discount ? (
-                        <span className="block text-[10px] text-gray-400 line-through">{money(lineSubtotal)}</span>
-                    ) : null}
-                </td>
-            </tr>
-        )
-    }, [])
+                    </td>
+                    <td className="text-center">{item.quantity}</td>
+                    <td className="text-right">{money(item.price)}</td>
+                    <td className="text-right text-red-600">{discount ? `-${money(discount)}` : "-"}</td>
+                    <td className="text-right font-medium">
+                        {money(lineTotal)}
+                        {discount ? (
+                            <span className="block text-[10px] text-gray-400 line-through">{money(lineSubtotal)}</span>
+                        ) : null}
+                    </td>
+                </tr>
+            )
+        },
+        []
+    )
 
-    // const generatePdf = async () => {
-    //     if (!componentRef.current) return
-    //     try {
-    //         setDownloading(true)
-    //         // @ts-ignore dynamic import no types
-    //         const html2canvas = (await import("html2canvas")).default
-    //         // @ts-ignore dynamic import no types
-    //         const { jsPDF } = await import("jspdf")
-    //         const canvas = await html2canvas(componentRef.current, { scale: 2, useCORS: true, backgroundColor: "#fff" })
-    //         const pdf = new jsPDF("p", "mm", "a4")
-    //         const margin = 10
-    //         const pageWidth = pdf.internal.pageSize.getWidth()
-    //         const pageHeight = pdf.internal.pageSize.getHeight()
-    //         const usableWidth = pageWidth - margin * 2
-    //         const usableHeight = pageHeight - margin * 2
-    //         const scaleFactor = usableWidth / canvas.width
-    //         const sliceHeightPx = usableHeight / scaleFactor
-    //         let rendered = 0
-    //         let page = 0
-    //         while (rendered < canvas.height) {
-    //             const sliceCanvas = document.createElement("canvas")
-    //             sliceCanvas.width = canvas.width
-    //             const h = Math.min(sliceHeightPx, canvas.height - rendered)
-    //             sliceCanvas.height = h
-    //             const ctx = sliceCanvas.getContext("2d")
-    //             ctx?.drawImage(canvas, 0, rendered, canvas.width, h, 0, 0, canvas.width, h)
-    //             const img = sliceCanvas.toDataURL("image/png")
-    //             if (page > 0) pdf.addPage()
-    //             pdf.addImage(img, "PNG", margin, margin, usableWidth, h * scaleFactor)
-    //             rendered += h
-    //             page++
-    //         }
-    //         pdf.save(`order-${orderData?.orderId || "invoice"}.pdf`)
-    //     } catch (e) {
-    //         console.error(e)
-    //     } finally {
-    //         setDownloading(false)
-    //     }
-    // }
+    // PDF Generation
+    const generatePdf = async () => {
+        if (!componentRef.current) return
+        try {
+            setDownloading(true)
+            const html2canvas = (await import("html2canvas")).default
+            const { jsPDF } = await import("jspdf")
+
+            // Ensure images are loaded
+            const images = componentRef.current.querySelectorAll("img")
+            await Promise.all(
+                Array.from(images).map((img) => {
+                    if (img.complete) return Promise.resolve(null)
+                    return new Promise((resolve) => {
+                        img.onload = resolve
+                        img.onerror = resolve
+                    })
+                })
+            )
+
+            const canvas = await html2canvas(componentRef.current, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: "#fff",
+                imageTimeout: 15000,
+                logging: false,
+            })
+
+            const pdf = new jsPDF("p", "mm", "a4")
+            const margin = 10
+            const pageWidth = pdf.internal.pageSize.getWidth()
+            const pageHeight = pdf.internal.pageSize.getHeight()
+            const usableWidth = pageWidth - margin * 2
+            const usableHeight = pageHeight - margin * 2
+            const scaleFactor = usableWidth / canvas.width
+            const sliceHeightPx = usableHeight / scaleFactor
+
+            let rendered = 0
+            let page = 0
+            while (rendered < canvas.height) {
+                const sliceCanvas = document.createElement("canvas")
+                sliceCanvas.width = canvas.width
+                const h = Math.min(sliceHeightPx, canvas.height - rendered)
+                sliceCanvas.height = h
+                const ctx = sliceCanvas.getContext("2d")
+                ctx?.drawImage(canvas, 0, rendered, canvas.width, h, 0, 0, canvas.width, h)
+                const img = sliceCanvas.toDataURL("image/png")
+                if (page > 0) pdf.addPage()
+                pdf.addImage(img, "PNG", margin, margin, usableWidth, h * scaleFactor)
+                rendered += h
+                page++
+            }
+            pdf.save(`order-${orderData?.orderId || "invoice"}.pdf`)
+        } catch (e) {
+            console.error(e)
+        } finally {
+            setDownloading(false)
+        }
+    }
 
     if (!orderData) {
         return (
@@ -160,14 +189,19 @@ const OrderView = ({ orderData }: { orderData?: OrderData | null }) => {
     return (
         <div className="space-y-2">
             {/* Printable Area */}
-            <div
-                className=" print:shadow-none print:p-2 print:bg-transparent"
-                ref={componentRef}
-            >
+            <div className="print:shadow-none print:p-2 print:bg-transparent" ref={componentRef}>
                 {/* Header */}
                 <div className="flex justify-between flex-wrap gap-4 border-b pb-4 mb-4">
                     <div className="flex items-center gap-3">
-                        <Image width={64} height={64} alt="logo" className="h-14 w-14 object-contain" src="/youngheart.png" />
+                        <Image
+                            width={64}
+                            height={64}
+                            alt="logo"
+                            className="h-14 w-14 object-contain"
+                            src="/youngheart.png"
+                            unoptimized
+                            priority
+                        />
                         <div>
                             <h1 className="text-lg font-semibold">Invoice</h1>
                             <p className="text-xs text-gray-500">Thank you for your purchase!</p>
@@ -183,7 +217,13 @@ const OrderView = ({ orderData }: { orderData?: OrderData | null }) => {
                         </p>
                         <p>
                             <span className="text-gray-500">Payment:</span>{" "}
-                            <strong>{orderData.paymentMethod === "cod" ? "Cash On Delivery" : orderData.paymentMethod ? "Online" : "-"}</strong>
+                            <strong>
+                                {orderData.paymentMethod === "cod"
+                                    ? "Cash On Delivery"
+                                    : orderData.paymentMethod
+                                        ? "Online"
+                                        : "-"}
+                            </strong>
                         </p>
                         {orderData.status && (
                             <p>
@@ -218,7 +258,7 @@ const OrderView = ({ orderData }: { orderData?: OrderData | null }) => {
                 </div>
 
                 {/* Items */}
-                <table className="w-full text-xs border border-gray-200 mb-6 ">
+                <table className="w-full text-xs border border-gray-200 mb-6">
                     <thead className="bg-gray-100 text-gray-700">
                         <tr className="*:*:px-3 *:*:py-2">
                             <th className="text-left">#</th>
@@ -278,7 +318,7 @@ const OrderView = ({ orderData }: { orderData?: OrderData | null }) => {
                     Print
                 </button>
                 <button
-                    // onClick={generatePdf}
+                    onClick={generatePdf}
                     disabled={downloading}
                     className="bg-blue-600 disabled:opacity-50 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition"
                 >
