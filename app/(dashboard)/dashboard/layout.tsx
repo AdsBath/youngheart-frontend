@@ -19,9 +19,7 @@ export default function RootLayout({
       user?.role === Role.ADMIN ||
       user?.role === Role.SUPER_ADMIN ||
       user?.role === Role.EMPLOYEE ||
-      user?.role === Role.MANAGER ||
-      user?.role === Role.USER ||
-      user?.role === Role.GUEST
+      user?.role === Role.MANAGER
     )
   ) {
     return redirect("/auth/sign-in");

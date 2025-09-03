@@ -1,13 +1,43 @@
-import { CategoryApia } from "@/components/api/catagory";
 import { Layout, LayoutBody, LayoutHeader } from "@/components/custom/layout";
-import Analytics from "@/components/dashboard/analytics";
-import { NotificationShow } from "@/components/dashboard/notification-show";
-import Overview from "@/components/dashboard/overview";
-import Reports from "@/components/dashboard/reports";
-
 import { TopNav } from "@/components/top-nav";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { UserNav } from "@/components/user-nav";
+import dynamic from "next/dynamic";
+import DashboardTabs from "./dashboard-tabs";
+
+// Dynamic imports to reduce initial JS bundle & speed up first paint
+const NotificationShow = dynamic(
+  () =>
+    import("@/components/dashboard/notification-show").then(
+      (m) => m.NotificationShow
+    ),
+  {
+    loading: () => (
+      <div className="h-6 w-6 animate-pulse rounded bg-muted/40" aria-hidden />
+    ),
+  }
+);
+
+const UserNav = dynamic(
+  () => import("@/components/user-nav").then((m) => m.UserNav),
+  {
+    loading: () => (
+      <div
+        className="h-8 w-8 rounded-full bg-muted/40 animate-pulse"
+        aria-hidden
+      />
+    ),
+  }
+);
+
+// Categories not critical for first paint -> load after hydration (ssr:false)
+const CategoryApia = dynamic(
+  () => import("@/components/api/catagory").then((m) => m.CategoryApia),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="px-4 py-2 text-xs text-muted-foreground">Loading categories…</div>
+    ),
+  }
+);
 
 export default function Dashboard() {
   return (
@@ -19,39 +49,14 @@ export default function Dashboard() {
           {/* <Search /> */}
           {/* <SearchComponent /> */}
           <NotificationShow />
-
           <UserNav />
         </div>
       </LayoutHeader>
       <CategoryApia />
       {/* ===== Main ===== */}
       <LayoutBody className="space-y-4">
-        <Tabs
-          orientation="vertical"
-          defaultValue="overview"
-          className="space-y-4"
-        >
-          <div className="w-full overflow-x-scroll pb-2">
-            <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="reports">Reports</TabsTrigger>
-              {/* <TabsTrigger value="notifications">Notifications</TabsTrigger> */}
-            </TabsList>
-          </div>
-          <TabsContent value="overview" className="space-y-4">
-            <Overview />
-          </TabsContent>
-          <TabsContent value="analytics" className="space-y-4">
-            <Analytics />
-          </TabsContent>
-          <TabsContent value="reports" className="space-y-4">
-            <Reports />
-          </TabsContent>
-          {/* <TabsContent value="notifications" className="space-y-4">
-            <Notification />
-          </TabsContent> */}
-        </Tabs>
+        {/* Lazy + on-demand mounted tabs (see DashboardTabs.tsx) */}
+        <DashboardTabs />
       </LayoutBody>
     </Layout>
   );
