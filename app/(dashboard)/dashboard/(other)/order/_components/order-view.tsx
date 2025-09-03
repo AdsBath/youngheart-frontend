@@ -24,10 +24,10 @@ interface OrderItem {
 }
 
 interface OrderData {
-    orderId: string
-    createdAt: string
-    paymentMethod: string
-    billingAddress: string
+    orderId?: string
+    createdAt?: string
+    paymentMethod?: string
+    billingAddress?: string
     shipToDifferentAddress?: string | null
     shippingCharge?: number
     discount?: number | null
@@ -45,7 +45,7 @@ interface OrderData {
     status?: string
 }
 
-const OrderView = ({ orderData }: { orderData: OrderData }) => {
+const OrderView = ({ orderData }: { orderData?: OrderData | null }) => {
     const componentRef = useRef<HTMLDivElement | null>(null)
     const [downloading, setDownloading] = useState(false)
 
@@ -53,68 +53,26 @@ const OrderView = ({ orderData }: { orderData: OrderData }) => {
         content: () => componentRef.current,
     })
 
-    // const generatePdf = useCallback(async () => {
-    //     if (!componentRef.current) return
-
-    //     setDownloading(true)
-    //     try {
-    //         // Dynamic import to reduce bundle size
-    //         const html2canvas = (await import("html2canvas")).default
-    //         const jsPDF = (await import("jspdf")).default
-
-    //         const canvas = await html2canvas(componentRef.current, {
-    //             scale: 2,
-    //             useCORS: true,
-    //             allowTaint: true,
-    //             backgroundColor: "#ffffff",
-    //         })
-
-    //         const imgData = canvas.toDataURL("image/png")
-    //         const pdf = new jsPDF("p", "mm", "a4")
-
-    //         const imgWidth = 210
-    //         const pageHeight = 295
-    //         const imgHeight = (canvas.height * imgWidth) / canvas.width
-    //         let heightLeft = imgHeight
-
-    //         let position = 0
-
-    //         pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight)
-    //         heightLeft -= pageHeight
-
-    //         while (heightLeft >= 0) {
-    //             position = heightLeft - imgHeight
-    //             pdf.addPage()
-    //             pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight)
-    //             heightLeft -= pageHeight
-    //         }
-
-    //         pdf.save(`invoice-${orderData.orderId}.pdf`)
-    //     } catch (error) {
-    //         console.error("Error generating PDF:", error)
-    //         alert("Failed to generate PDF. Please try again.")
-    //     } finally {
-    //         setDownloading(false)
-    //     }
-    // }, [orderData.orderId])
-
-    const calculations = useCallback(() => {
-        const items = orderData?.orderItems || []
-        const subtotal = items.reduce((acc, it) => acc + (it.price || 0) * (it.quantity || 0), 0)
-        const lineDiscount = items.reduce((acc, it) => acc + (it.discountAmmount || 0), 0)
-        const orderLevelDiscount = orderData.discountAmmount || orderData.discount || 0
-        const totalDiscount = lineDiscount || orderLevelDiscount
-        const shipping = Number(orderData.shippingCharge || 0)
-        const payable = subtotal - totalDiscount + shipping
-
-        return { items, subtotal, totalDiscount, shipping, payable }
-    }, [orderData])
-
-    const { items, subtotal, totalDiscount, shipping, payable } = calculations()
+    const rawItems = Array.isArray(orderData?.orderItems) ? orderData!.orderItems! : []
+    const items: OrderItem[] = rawItems.filter(Boolean)
+    const subtotal = items.reduce(
+        (acc, it) => acc + Number(it?.price || 0) * Number(it?.quantity || 0),
+        0
+    )
+    const lineDiscount = items.reduce(
+        (acc, it) => acc + Number((it as any)?.discountAmmount || 0),
+        0
+    )
+    const orderLevelDiscount = Number(
+        orderData?.discountAmmount || orderData?.discount || 0
+    )
+    const totalDiscount = lineDiscount > 0 ? lineDiscount : orderLevelDiscount
+    const shipping = Number(orderData?.shippingCharge || 0)
+    const payable = subtotal - totalDiscount + shipping
 
     const OrderItemRow = useCallback(({ item, index }: { item: OrderItem; index: number }) => {
-        const lineSubtotal = item.price * item.quantity
-        const discount = item.discountAmmount || 0
+        const lineSubtotal = Number(item?.price || 0) * Number(item?.quantity || 0)
+        const discount = Number((item as any)?.discountAmmount || 0)
         const lineTotal = lineSubtotal - discount
 
         return (
@@ -153,6 +111,52 @@ const OrderView = ({ orderData }: { orderData: OrderData }) => {
         )
     }, [])
 
+    // const generatePdf = async () => {
+    //     if (!componentRef.current) return
+    //     try {
+    //         setDownloading(true)
+    //         // @ts-ignore dynamic import no types
+    //         const html2canvas = (await import("html2canvas")).default
+    //         // @ts-ignore dynamic import no types
+    //         const { jsPDF } = await import("jspdf")
+    //         const canvas = await html2canvas(componentRef.current, { scale: 2, useCORS: true, backgroundColor: "#fff" })
+    //         const pdf = new jsPDF("p", "mm", "a4")
+    //         const margin = 10
+    //         const pageWidth = pdf.internal.pageSize.getWidth()
+    //         const pageHeight = pdf.internal.pageSize.getHeight()
+    //         const usableWidth = pageWidth - margin * 2
+    //         const usableHeight = pageHeight - margin * 2
+    //         const scaleFactor = usableWidth / canvas.width
+    //         const sliceHeightPx = usableHeight / scaleFactor
+    //         let rendered = 0
+    //         let page = 0
+    //         while (rendered < canvas.height) {
+    //             const sliceCanvas = document.createElement("canvas")
+    //             sliceCanvas.width = canvas.width
+    //             const h = Math.min(sliceHeightPx, canvas.height - rendered)
+    //             sliceCanvas.height = h
+    //             const ctx = sliceCanvas.getContext("2d")
+    //             ctx?.drawImage(canvas, 0, rendered, canvas.width, h, 0, 0, canvas.width, h)
+    //             const img = sliceCanvas.toDataURL("image/png")
+    //             if (page > 0) pdf.addPage()
+    //             pdf.addImage(img, "PNG", margin, margin, usableWidth, h * scaleFactor)
+    //             rendered += h
+    //             page++
+    //         }
+    //         pdf.save(`order-${orderData?.orderId || "invoice"}.pdf`)
+    //     } catch (e) {
+    //         console.error(e)
+    //     } finally {
+    //         setDownloading(false)
+    //     }
+    // }
+
+    if (!orderData) {
+        return (
+            <div className="p-4 text-sm text-gray-500 border rounded-md">No order data provided.</div>
+        )
+    }
+
     return (
         <div className="space-y-2">
             {/* Printable Area */}
@@ -171,15 +175,15 @@ const OrderView = ({ orderData }: { orderData: OrderData }) => {
                     </div>
                     <div className="text-right text-xs leading-5">
                         <p>
-                            <span className="text-gray-500">Order ID:</span> <strong>{orderData.orderId}</strong>
+                            <span className="text-gray-500">Order ID:</span> <strong>{orderData.orderId || "-"}</strong>
                         </p>
                         <p>
                             <span className="text-gray-500">Date:</span>{" "}
-                            <strong>{format(orderData.createdAt || new Date(), "PP")}</strong>
+                            <strong>{format(orderData.createdAt ? new Date(orderData.createdAt) : new Date(), "PP")}</strong>
                         </p>
                         <p>
                             <span className="text-gray-500">Payment:</span>{" "}
-                            <strong>{orderData.paymentMethod === "cod" ? "Cash On Delivery" : "Online"}</strong>
+                            <strong>{orderData.paymentMethod === "cod" ? "Cash On Delivery" : orderData.paymentMethod ? "Online" : "-"}</strong>
                         </p>
                         {orderData.status && (
                             <p>
@@ -196,7 +200,7 @@ const OrderView = ({ orderData }: { orderData: OrderData }) => {
                         <p className="font-medium">
                             {orderData.user?.firstName} {orderData.user?.lastName}
                         </p>
-                        <p className="text-gray-600 whitespace-pre-line break-words">{orderData.billingAddress}</p>
+                        <p className="text-gray-600 whitespace-pre-line break-words">{orderData.billingAddress || "-"}</p>
                         <p>{orderData.user?.phone}</p>
                         <p>{orderData.user?.email}</p>
                     </div>
@@ -227,7 +231,7 @@ const OrderView = ({ orderData }: { orderData: OrderData }) => {
                     </thead>
                     <tbody className="p-2">
                         {items.map((item, idx) => (
-                            <OrderItemRow key={item.id} item={item} index={idx} />
+                            <OrderItemRow key={item.id || idx.toString()} item={item} index={idx} />
                         ))}
                         {items.length === 0 && (
                             <tr className="border-t">
