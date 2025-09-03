@@ -26,7 +26,7 @@ const EditOrderDialog = () => {
   return (
     <div>
       <Dialog open={isOpen}>
-        <DialogContent style={{ maxWidth: "800px", width: "90%" }}>
+        <DialogContent style={{ maxWidth: "800px" }}>
           <DialogHeader>
             <DialogTitle>
               Order Invoice
