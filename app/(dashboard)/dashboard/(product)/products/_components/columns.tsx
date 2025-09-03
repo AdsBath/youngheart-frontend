@@ -1,6 +1,5 @@
 import { Badge } from "@/components/ui/badge";
 import BlurImage from "@/components/ui/blur-image";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ProductItem, priorities, statuses } from "./schema";
@@ -9,30 +8,6 @@ import { DataTableColumnHeader } from "@/components/table/data-table-column-head
 import { DataTableRowActions } from "./data-table-row-actions";
 
 export const columns: ColumnDef<ProductItem>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px]"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px]"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "thumbnail",
     header: ({ column }) => (
@@ -70,15 +45,14 @@ export const columns: ColumnDef<ProductItem>[] = [
               priority.value === "inStock"
                 ? "default"
                 : priority.value === "outOfStock"
-                ? "outline"
-                : "secondary"
+                  ? "outline"
+                  : "secondary"
             }
           >
             {priority.icon && (
               <priority.icon
-                className={`mr-1 h-4 w-4 ${
-                  priority.value === "outOfStock" ? "text-red-500" : ""
-                }`}
+                className={`mr-1 h-4 w-4 ${priority.value === "outOfStock" ? "text-red-500" : ""
+                  }`}
               />
             )}
             {priority.label}
@@ -205,8 +179,8 @@ export const columns: ColumnDef<ProductItem>[] = [
               status.value === "archived"
                 ? "secondary"
                 : status.value === "published"
-                ? "default"
-                : "destructive"
+                  ? "default"
+                  : "destructive"
             }
           >
             {status.icon && <status.icon className={`mr-1 h-4 w-4`} />}

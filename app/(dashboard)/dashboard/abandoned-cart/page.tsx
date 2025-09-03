@@ -14,21 +14,19 @@ export const metadata: Metadata = {
 export default function AbandonedCart() {
   return (
     <Layout>
-      <ScrollArea className="h-[100vh]">
-        {/* ===== Top Heading ===== */}
-        <LayoutHeader>
-          {/* <Search /> */}
-          <Breadcrumbs items={[{ label: "Admin" }]} />
-          <div className="ml-auto flex items-center space-x-4">
-            <NotificationShow />
+      {/* ===== Top Heading ===== */}
+      <LayoutHeader>
+        {/* <Search /> */}
+        <Breadcrumbs items={[{ label: "Admin" }]} />
+        <div className="ml-auto flex items-center space-x-4">
+          <NotificationShow />
 
-            <UserNav />
-          </div>
-        </LayoutHeader>
-        <LayoutBody>
-          <AbandonedCartList />
-        </LayoutBody>
-      </ScrollArea>
+          <UserNav />
+        </div>
+      </LayoutHeader>
+      <LayoutBody>
+        <AbandonedCartList />
+      </LayoutBody>
     </Layout>
   );
 }
