@@ -334,7 +334,7 @@ export const sideLinks = (role: string) => {
     },
     {
       title: "Customer",
-      label: "6",
+      label: "",
       href: "/dashboard/rating-reviews",
       icon: <IconUsersGroup size={18} />,
       sub: [
@@ -506,7 +506,7 @@ export const sideLinks = (role: string) => {
     },
     {
       title: "Customer",
-      label: "6",
+      label: "",
       href: "/dashboard/rating-reviews",
       icon: <IconUsersGroup size={18} />,
       sub: [
@@ -532,7 +532,7 @@ export const sideLinks = (role: string) => {
     // },
     {
       title: "Abandoned Cart",
-      label: "6",
+      label: "",
       href: "/dashboard/abandoned-cart",
       icon: <IconShoppingBagX size={18} />,
     },
