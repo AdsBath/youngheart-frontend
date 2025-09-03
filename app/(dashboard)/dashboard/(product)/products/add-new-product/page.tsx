@@ -20,15 +20,14 @@ export default function NewProduct() {
           <Breadcrumbs
             items={[
               {
-                label: "Manage Products",
-                href: "/products",
+                label: "All Products",
+                href: "/dashboard/products",
               },
-              { label: "Products List", href: "/products" },
               { label: "Add New Product" },
             ]}
           />
           <div className="ml-auto flex items-center space-x-4">
-             {/* */}
+            {/* */}
             <UserNav />
           </div>
         </LayoutHeader>

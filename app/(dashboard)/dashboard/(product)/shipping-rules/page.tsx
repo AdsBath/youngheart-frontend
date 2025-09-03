@@ -22,15 +22,15 @@ export default function ShippingRule() {
           <Breadcrumbs
             items={[
               {
-                label: "Manage Products",
-                href: "/products",
+                label: "Shipping Rules",
+                href: "/dashboard/shipping-rules",
               },
-              { label: "Coupon List" },
+              { label: "All Shipping Rules" },
             ]}
           />
           <div className="ml-auto flex items-center space-x-4">
             <NotificationShow />
-          
+
             <UserNav />
           </div>
         </LayoutHeader>

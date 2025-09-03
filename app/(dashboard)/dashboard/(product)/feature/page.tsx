@@ -20,10 +20,10 @@ export default function Feature() {
           <Breadcrumbs
             items={[
               {
-                label: "Manage Products",
-                href: "/dashboard/products",
+                label: "All Features",
+                href: "/dashboard/feature",
               },
-              { label: "Features", href: "/dashboard/feauters" },
+              { label: "List" },
             ]}
           />
           <div className="ml-auto flex items-center space-x-4">

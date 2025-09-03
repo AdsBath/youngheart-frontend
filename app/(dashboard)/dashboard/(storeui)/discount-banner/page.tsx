@@ -23,14 +23,14 @@ export default function DiscountBanner() {
             items={[
               {
                 label: "Manage Banners",
-                href: "/banner",
+                href: "/dashboard/banner",
               },
               { label: "Banner List" },
             ]}
           />
           <div className="ml-auto flex items-center space-x-4">
             <NotificationShow />
-           
+
             <UserNav />
           </div>
         </LayoutHeader>

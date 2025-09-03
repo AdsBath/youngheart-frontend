@@ -22,7 +22,7 @@ const Inventory = () => {
             items={[
               {
                 label: "Inventory",
-                href: "/inventory",
+                href: "/dashboard/inventory",
               },
             ]}
           />

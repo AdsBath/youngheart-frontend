@@ -23,14 +23,14 @@ export default function CustomDesign() {
             items={[
               {
                 label: "Manage Career",
-                href: "/career",
+                href: "/dashboard/career",
               },
               { label: "Career List" },
             ]}
           />
           <div className="ml-auto flex items-center space-x-4">
             <NotificationShow />
-           
+
             <UserNav />
           </div>
         </LayoutHeader>

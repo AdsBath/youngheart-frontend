@@ -23,14 +23,14 @@ export default function RegisteredCustomer() {
             items={[
               {
                 label: "Customer",
-                href: "/registered-customer",
+                href: "/dashboard/registered-customer",
               },
               { label: "Registered" },
             ]}
           />
           <div className="ml-auto flex items-center space-x-4">
             <NotificationShow />
-           
+
             <UserNav />
           </div>
         </LayoutHeader>

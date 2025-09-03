@@ -21,10 +21,10 @@ const Brand = () => {
           <Breadcrumbs
             items={[
               {
-                label: "Manage Products",
-                href: "/dashboard/products",
+                label: "All Brands",
+                href: "/dashboard/brands",
               },
-              { label: "Brands" },
+              { label: "List" },
             ]}
           />
           <div className="ml-auto flex items-center space-x-4">

@@ -22,15 +22,15 @@ export default function BundleDeals() {
           <Breadcrumbs
             items={[
               {
-                label: "Manage Products",
-                href: "/products",
+                label: "All Bundle Deals",
+                href: "/dashboard/bundle-deals",
               },
-              { label: "Bundle Deals" },
+              { label: "List" },
             ]}
           />
           <div className="ml-auto flex items-center space-x-4">
             <NotificationShow />
-            
+
             <UserNav />
           </div>
         </LayoutHeader>

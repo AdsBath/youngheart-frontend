@@ -22,14 +22,14 @@ export default function GuestCustomer() {
             items={[
               {
                 label: "Customer",
-                href: "/guest-customer",
+                href: "/dashboard/guest-customer",
               },
               { label: "Guest" },
             ]}
           />
           <div className="ml-auto flex items-center space-x-4">
             <NotificationShow />
-            
+
             <UserNav />
           </div>
         </LayoutHeader>

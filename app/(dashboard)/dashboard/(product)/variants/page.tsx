@@ -15,29 +15,28 @@ export const metadata: Metadata = {
 export default function Variants() {
   return (
     <Layout>
-      <ScrollArea className="h-[100vh]">
-        {/* ===== Top Heading ===== */}
-        <LayoutHeader>
-          {/* <Search /> */}
-          <Breadcrumbs
-            items={[
-              {
-                label: "Manage Products",
-                href: "/products",
-              },
-              { label: "Product variants" },
-            ]}
-          />
-          <div className="ml-auto flex items-center space-x-4">
-            <NotificationShow />
-         
-            <UserNav />
-          </div>
-        </LayoutHeader>
-        <LayoutBody>
-          <VariantsList />
-        </LayoutBody>
-      </ScrollArea>
-    </Layout>
+      {/* ===== Top Heading ===== */}
+      <LayoutHeader>
+        {/* <Search /> */}
+        <Breadcrumbs
+          items={[
+            {
+              label: "All Product Variants",
+              href: "/dashboard/variants",
+            },
+            { label: "List" },
+          ]}
+        />
+        <div className="ml-auto flex items-center space-x-4">
+          <NotificationShow />
+
+          <UserNav />
+        </div>
+      </LayoutHeader>
+      <LayoutBody>
+        <VariantsList />
+      </LayoutBody>
+
+    </Layout >
   );
 }
