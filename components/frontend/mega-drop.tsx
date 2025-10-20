@@ -76,7 +76,7 @@ export function MegaMenu({ category }: { category: Category }) {
                               style={{ width: "99vw" }}
                          >
                               <div className="px-16 py-8">
-                                   <div className={`grid gap-8 grid-cols-2`}>
+                                   <div className={`grid gap-6 grid-cols-2`}>
                                         <motion.div
                                              initial={{ opacity: 0, x: -10 }}
                                              animate={{ opacity: 1, x: 0 }}

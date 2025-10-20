@@ -62,9 +62,9 @@ const ProductCollection = ({ collections }: any) => {
       (item: any) =>
         item.products?.length > 0 && (
           <div key={item.id} className="my-6 mt-10">
-            <section className="container px-2 space-y-6">
+            <section className="px-8 space-y-6">
               <h2 className="text-xl md:text-4xl font-semibold mb-2 font-alt">
-                {item.collectionName.toUpperCase()}
+                {item.collectionName}
               </h2>
               <div className="md:px-5">
                 <ProductCarousel products={item.products} />
@@ -134,7 +134,7 @@ export const ProductCarousel = ({ products }: any) => {
           {publishedProducts?.map((product: any) => (
             <CarouselItem
               key={product.id}
-              className="basis-[80%] md:basis-[35%] lg:basis-[24%] px-2"
+              className="basis-[80%] sm:basis-[50%] md:basis-[35%] lg:basis-[24%] xl:basis-[18%] px-2"
             >
               <div className="h-full">
                 <ProductCard product={product} />
@@ -142,8 +142,8 @@ export const ProductCarousel = ({ products }: any) => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="-left-8 border-none rounded-xs bg-[#f97316] hover:bg-[#f97316] text-white hidden md:flex hover:text-white" />
-        <CarouselNext className="-right-8 border-none rounded-xs bg-[#f97316] hover:bg-[#f97316]  text-white hidden md:flex hover:text-white" />
+        <CarouselPrevious className="-left-10 border-none rounded-sm bg-[#f974168b] hover:bg-[#f97316]  text-white hidden md:flex hover:text-white" />
+        <CarouselNext className="-right-10 border-none rounded-sm bg-[#f974168b] hover:bg-[#f97316]  text-white hidden md:flex hover:text-white" />
       </Carousel>
 
       {/* Navigation Dots */}
@@ -152,11 +152,10 @@ export const ProductCarousel = ({ products }: any) => {
           {Array.from({ length: count }).map((_, index) => (
             <button
               key={index}
-              className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-                index + 1 === current
-                  ? "bg-black dark:bg-white"
-                  : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
-              }`}
+              className={`w-2 h-2 rounded-full transition-colors duration-200 ${index + 1 === current
+                ? "bg-black dark:bg-white"
+                : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
+                }`}
               onClick={() => scrollTo(index)}
               aria-label={`Go to slide ${index + 1}`}
             />

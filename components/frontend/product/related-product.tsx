@@ -100,8 +100,8 @@ const RelatedProduct = ({ categoryId }: { categoryId: string }) => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="-left-8 border-none rounded-xs bg-[#f97316] hover:bg-[#f97316] text-white hidden md:flex hover:text-white" />
-            <CarouselNext className="-right-8 border-none rounded-xs bg-[#f97316] hover:bg-[#f97316]  text-white hidden md:flex hover:text-white" />
+            <CarouselPrevious className="-left-10 border-none rounded-sm bg-[#f974168b] hover:bg-[#f97316]  text-white hidden md:flex hover:text-white" />
+            <CarouselNext className="-right-10 border-none rounded-sm bg-[#f974168b] hover:bg-[#f97316]  text-white hidden md:flex hover:text-white" />
           </Carousel>
           {/* Navigation Dots */}
           {count > 1 && (
@@ -109,11 +109,10 @@ const RelatedProduct = ({ categoryId }: { categoryId: string }) => {
               {Array.from({ length: count }).map((_, index) => (
                 <button
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-                    index + 1 === current
+                  className={`w-2 h-2 rounded-full transition-colors duration-200 ${index + 1 === current
                       ? "bg-black dark:bg-white"
                       : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
-                  }`}
+                    }`}
                   onClick={() => scrollTo(index)}
                   aria-label={`Go to slide ${index + 1}`}
                 />

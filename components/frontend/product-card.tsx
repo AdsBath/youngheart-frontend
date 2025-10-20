@@ -215,8 +215,8 @@ const ProductCard = ({ product }: any) => {
       discountAmmount:
         parseFloat(product?.discountPrice) > 0
           ? (parseFloat(removeCommas(product?.price)) *
-              parseFloat(product?.discountPrice)) /
-            100
+            parseFloat(product?.discountPrice)) /
+          100
           : 0,
       discount:
         parseFloat(product?.discountPrice) > 0
@@ -246,7 +246,7 @@ const ProductCard = ({ product }: any) => {
   );
 
   return (
-    <div className="group relative bg-white rounded-lg overflow-hidden transition-all duration-300 ">
+    <div className="group relative bg-white rounded-lg overflow-hidden hover:border hover:border-[#f97316] transition-all duration-300 ">
       {/* Image Container */}
       <div className="relative aspect-[3/4] overflow-hidden bg-[#f4f4f4]">
         <link

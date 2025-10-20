@@ -10,7 +10,7 @@ import type { Metadata } from "next";
 // Metadata for SEO optimization
 export const metadata: Metadata = {
   title: "Youngheart | Your One-Stop Shop for  Bags",
-  description: "",
+  description: "Discover amazing deals and a wide range of products at Youngheart. Shop now and enjoy exclusive discounts and offers!",
   keywords:
     "youngheart, online shopping, ecommerce, discounts, offers, product features, collections",
 };

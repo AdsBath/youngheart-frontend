@@ -89,21 +89,21 @@ const Footer = () => {
             <div className="flex flex-col">
               {footerCategoryLoading
                 ? Array.from({ length: 2 }).map((_, idx) => (
-                    <div key={idx}>
-                      <Skeleton className="h-3 w-[50%] mt-1" />
-                      <Skeleton className="h-2 w-[30%] mt-1" />
-                    </div>
-                  ))
+                  <div key={idx}>
+                    <Skeleton className="h-3 w-[50%] mt-1" />
+                    <Skeleton className="h-2 w-[30%] mt-1" />
+                  </div>
+                ))
                 : footerCategories?.map((category: any, idx: number) => (
-                    <Link key={idx} href={`/all-product/${category?.slug}`}>
-                      <span
-                        className="py-[1px] hover:underline text-[14px] transition-all duration-200"
-                        style={{ color: BRAND_COLOR }}
-                      >
-                        {category?.title}
-                      </span>
-                    </Link>
-                  ))}
+                  <Link key={idx} href={`/all-product/${category?.slug}`}>
+                    <span
+                      className="py-[1px] hover:underline text-[14px] transition-all duration-200"
+                      style={{ color: BRAND_COLOR }}
+                    >
+                      {category?.title}
+                    </span>
+                  </Link>
+                ))}
             </div>
           </div>
 
@@ -113,7 +113,7 @@ const Footer = () => {
               className="font-bold mb-2 text-xl"
               style={{ color: BRAND_COLOR }}
             >
-              QUICK LINKS
+              Quick Links
             </h3>
             <div
               className="flex flex-col"
@@ -146,7 +146,7 @@ const Footer = () => {
               className="font-bold mb-2 text-xl"
               style={{ color: BRAND_COLOR }}
             >
-              CONTACT INFO
+              Contact Info
             </h3>
             <div
               className="flex flex-col"
