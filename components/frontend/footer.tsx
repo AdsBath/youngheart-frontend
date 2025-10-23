@@ -79,11 +79,8 @@ const Footer = () => {
           </div>
 
           {/* Categories */}
-          <div className="w-full sm:w-[22%] text-base">
-            <h3
-              className="font-bold mb-2 text-xl"
-              style={{ color: BRAND_COLOR }}
-            >
+          <div className="w-full sm:w-[18%] text-base">
+            <h3 className="font-bold mb-2 text-xl" style={{ color: BRAND_COLOR }}>
               Categories
             </h3>
             <div className="flex flex-col">
@@ -108,22 +105,13 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div className="w-full sm:w-[22%] text-base mb-3">
-            <h3
-              className="font-bold mb-2 text-xl"
-              style={{ color: BRAND_COLOR }}
-            >
+          <div className="w-full sm:w-[18%] text-base mb-3">
+            <h3 className="font-bold mb-2 text-xl" style={{ color: BRAND_COLOR }}>
               Quick Links
             </h3>
-            <div
-              className="flex flex-col"
-              style={{ color: BRAND_COLOR, fontSize: 15 }}
-            >
+            <div className="flex flex-col" style={{ color: BRAND_COLOR, fontSize: 15 }}>
               <Link href="/my-account">
                 <span className="hover:underline">My Account</span>
-              </Link>
-              <Link href="/cart">
-                <span className="hover:underline">Shopping Cart</span>
               </Link>
               <Link href="/my-account/orders">
                 <span className="hover:underline">Orders</span>
@@ -140,28 +128,41 @@ const Footer = () => {
             </div>
           </div>
 
+          {/* Information */}
+          <div className="w-full sm:w-[18%] text-base mb-3">
+            <h3 className="font-bold mb-2 text-xl" style={{ color: BRAND_COLOR }}>
+              Information
+            </h3>
+            <div className="flex flex-col" style={{ color: BRAND_COLOR, fontSize: 15 }}>
+              <Link href="/customize">
+                <span className="hover:underline">Customize</span>
+              </Link>
+              <Link href="/cart">
+                <span className="hover:underline">Shopping Cart</span>
+              </Link>
+              <Link href="/about">
+                <span className="hover:underline">About Us</span>
+              </Link>
+              <Link href="/policies">
+                <span className="hover:underline">Policies</span>
+              </Link>
+            </div>
+          </div>
+
           {/* Contact Info */}
           <div className="w-full sm:w-[22%] mb-3">
-            <h3
-              className="font-bold mb-2 text-xl"
-              style={{ color: BRAND_COLOR }}
-            >
+            <h3 className="font-bold mb-2 text-xl" style={{ color: BRAND_COLOR }}>
               Contact Info
             </h3>
-            <div
-              className="flex flex-col"
-              style={{ color: BRAND_COLOR, fontSize: 15 }}
-            >
+            <div className="flex flex-col" style={{ color: BRAND_COLOR, fontSize: 15 }}>
               <span>
-                <span className="font-semibold">Email:</span>{" "}
-                youngheartbd@gmail.com
+                <span className="font-semibold">Email:</span> youngheartbd@gmail.com
               </span>
               <span>
                 <span className="font-semibold">Call Us:</span> 01789649019
               </span>
               <span>
-                <span className="font-semibold">Address:</span> Road 7,
-                Ranavola, Turag, Dhaka-1230
+                <span className="font-semibold">Address:</span> Road 7, Ranavola, Turag, Dhaka-1230
               </span>
             </div>
           </div>
