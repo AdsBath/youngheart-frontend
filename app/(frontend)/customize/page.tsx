@@ -1,38 +1,42 @@
-"use client"
+"use client";
 
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Card, CardContent } from "@/components/ui/card"
-import { motion } from "framer-motion"
-import { FaRegGem, FaLeaf, FaTools } from "react-icons/fa"
-import { GiLeatherArmor, GiHand } from "react-icons/gi"
-import { MdOutlineDesignServices } from "react-icons/md"
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { FaRegGem, FaLeaf, FaTools } from "react-icons/fa";
+import { GiLeatherArmor, GiHand } from "react-icons/gi";
+import { MdOutlineDesignServices } from "react-icons/md";
 
 type CustomizationFormData = {
-  productType: string
-  leatherColor: string
-  liningType: string
-  liningColor: string
-  metalColor: string
-  stitchingColor: string
-  personalizationType: string
-  personalizationText: string
-  size: string
-  priceRange: string
-  deliveryDate: string
-  leatherType: string
-  strapType: string
-  ecoFriendly: boolean
-  otherDetails: string
-}
-
-
+  productType: string;
+  leatherColor: string;
+  liningType: string;
+  liningColor: string;
+  metalColor: string;
+  stitchingColor: string;
+  personalizationType: string;
+  personalizationText: string;
+  size: string;
+  priceRange: string;
+  deliveryDate: string;
+  leatherType: string;
+  strapType: string;
+  ecoFriendly: boolean;
+  otherDetails: string;
+};
 
 export default function CustomizePage() {
   const {
@@ -45,7 +49,7 @@ export default function CustomizePage() {
     defaultValues: {
       ecoFriendly: false,
     },
-  })
+  });
 
   const features = [
     {
@@ -69,30 +73,30 @@ export default function CustomizePage() {
   ];
 
   const onSubmit = (data: CustomizationFormData) => {
-    console.log("[v0] Form submitted:", data)
+    console.log("[v0] Form submitted:", data);
     // Handle form submission here
-  }
+  };
 
   return (
     <div className="min-h-screen bg-background space-y-10">
       <section className="relative bg-primary text-primary-foreground py-24 px-4 overflow-hidden">
         <div className="absolute inset-0 opacity-50">
-          <div className="absolute inset-0 bg-[url('/luxury-leather-texture.png')] bg-cover bg-center" />
+          <div className="absolute inset-0 bg-[url('/customise-design.jpg')] bg-cover bg-center" />
         </div>
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <h1 className="text-3xl md:text-7xl font-bold mb-6 text-balance">
             Customize Your Dream With Leather
           </h1>
           <p className="text-sm md:text-xl text-primary-foreground/90 font-serif max-w-2xl mx-auto leading-relaxed ">
-            Handcrafted excellence meets personal expression. Create a bespoke leather piece that tells your unique
-            story.
+            Handcrafted excellence meets personal expression. Create a bespoke
+            leather piece that tells your unique story.
           </p>
         </div>
       </section>
 
       <section className="bg-card md:hidden block">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
@@ -100,13 +104,13 @@ export default function CustomizePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.15, duration: 0.6 }}
                 viewport={{ once: true }}
-                className="group bg-background rounded-2xl shadow-sm hover:shadow-md p-8 text-center border border-border hover:border-primary/30 transition-all"
+                className="group bg-background rounded-xl shadow-sm hover:shadow-md p-6 text-center border border-border hover:border-primary/30 transition-all"
               >
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/15 transition-colors">
+                <div className="size-5 mx-auto rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/15 transition-colors">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">
+                <h3 className="text-lg font-semibold ">{feature.title}</h3>
+                <p className="text-muted-foreground leading-relaxed text-sm">
                   {feature.description}
                 </p>
               </motion.div>
@@ -115,10 +119,12 @@ export default function CustomizePage() {
         </div>
       </section>
 
-      <section className="container grid grid-cols-5 gap-6">
+      <section className="container grid grid-cols-5 gap-6 px-4">
         <div className="md:col-span-2 col-span-5">
-          <div className="mb-12">
-            <h2 className="text-xl md:text-2xl font-bold">Design Your Masterpiece</h2>
+          <div className="text-center md:text-start pb-2">
+            <h2 className="text-xl md:text-2xl font-bold">
+              Design Your Masterpiece
+            </h2>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Complete the form below to begin your custom leather journey
             </p>
@@ -144,42 +150,48 @@ export default function CustomizePage() {
             ))}
           </div>
         </div>
-        <div className="md:col-span-3 col-span-5 p-4 border rounded-xl">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="md:col-span-3 col-span-5 p-4 border rounded-xl ">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             {/* Product Type */}
             <div className="space-y-2">
-              <Label htmlFor="productType" >
-                Product Type
-              </Label>
+              <Label htmlFor="productType">Product Type</Label>
               <Input
                 id="productType"
                 placeholder="e.g., Wallet, Bag, Belt, Portfolio"
                 className="h-8"
-                {...register("productType", { required: "Product type is required" })}
+                {...register("productType", {
+                  required: "Product type is required",
+                })}
               />
-              {errors.productType && <p className="text-sm text-destructive">{errors.productType.message}</p>}
+              {errors.productType && (
+                <p className="text-sm text-destructive">
+                  {errors.productType.message}
+                </p>
+              )}
             </div>
 
             {/* Leather Color */}
             <div className="space-y-2">
-              <Label htmlFor="leatherColor" >
-                Leather Color
-              </Label>
+              <Label htmlFor="leatherColor">Leather Color</Label>
               <Input
                 id="leatherColor"
                 placeholder="e.g., Cognac Brown, Midnight Black, Natural Tan"
                 className="h-8"
-                {...register("leatherColor", { required: "Leather color is required" })}
+                {...register("leatherColor", {
+                  required: "Leather color is required",
+                })}
               />
-              {errors.leatherColor && <p className="text-sm text-destructive">{errors.leatherColor.message}</p>}
+              {errors.leatherColor && (
+                <p className="text-sm text-destructive">
+                  {errors.leatherColor.message}
+                </p>
+              )}
             </div>
 
             {/* Lining Type & Color */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="liningType" >
-                  Lining Type
-                </Label>
+                <Label htmlFor="liningType">Lining Type</Label>
                 <Input
                   id="liningType"
                   placeholder="e.g., Fabric, Suede, Leather"
@@ -188,9 +200,7 @@ export default function CustomizePage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="liningColor" >
-                  Lining Color
-                </Label>
+                <Label htmlFor="liningColor">Lining Color</Label>
                 <Input
                   id="liningColor"
                   placeholder="e.g., Burgundy, Navy, Cream"
@@ -202,9 +212,7 @@ export default function CustomizePage() {
 
             {/* Metal Color */}
             <div className="space-y-2">
-              <Label htmlFor="metalColor" >
-                Metal Color
-              </Label>
+              <Label htmlFor="metalColor">Metal Color</Label>
               <Select onValueChange={(value) => setValue("metalColor", value)}>
                 <SelectTrigger className="h-8">
                   <SelectValue placeholder="Select metal color" />
@@ -219,18 +227,27 @@ export default function CustomizePage() {
             </div>
 
             {/* Stitching Color */}
-            <div className="space-y-3">
-              <Label >Stitching Color</Label>
-              <RadioGroup onValueChange={(value) => setValue("stitchingColor", value)} className="flex gap-6">
+            <div className="space-y-2">
+              <Label>Stitching Color</Label>
+              <RadioGroup
+                onValueChange={(value) => setValue("stitchingColor", value)}
+                className="flex gap-6"
+              >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="matching" id="matching" />
-                  <Label htmlFor="matching" className="font-normal cursor-pointer">
+                  <Label
+                    htmlFor="matching"
+                    className="font-normal cursor-pointer"
+                  >
                     Matching Tone
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="contrast" id="contrast" />
-                  <Label htmlFor="contrast" className="font-normal cursor-pointer">
+                  <Label
+                    htmlFor="contrast"
+                    className="font-normal cursor-pointer"
+                  >
                     Contrast Stitching
                   </Label>
                 </div>
@@ -238,17 +255,25 @@ export default function CustomizePage() {
             </div>
 
             {/* Personalization */}
-            <div className="space-y-4">
-              <Label >Personalization</Label>
-              <div className="space-y-3">
-                <Select onValueChange={(value) => setValue("personalizationType", value)}>
+            <div className="space-y-2">
+              <Label>Personalization</Label>
+              <div className="space-y-2">
+                <Select
+                  onValueChange={(value) =>
+                    setValue("personalizationType", value)
+                  }
+                >
                   <SelectTrigger className="h-8">
                     <SelectValue placeholder="Select personalization type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="monogram">Monogram / Initials</SelectItem>
+                    <SelectItem value="monogram">
+                      Monogram / Initials
+                    </SelectItem>
                     <SelectItem value="name">Name Engraving</SelectItem>
-                    <SelectItem value="logo">Logo Engraving (Corporate)</SelectItem>
+                    <SelectItem value="logo">
+                      Logo Engraving (Corporate)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <Input
@@ -261,9 +286,7 @@ export default function CustomizePage() {
 
             {/* Size */}
             <div className="space-y-2">
-              <Label htmlFor="size" >
-                Size
-              </Label>
+              <Label htmlFor="size">Size</Label>
               <Input
                 id="size"
                 placeholder="e.g., Small, Medium, Large or custom dimensions"
@@ -275,24 +298,28 @@ export default function CustomizePage() {
             {/* Price Range & Delivery Date */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="priceRange" >
-                  Budget Range
-                </Label>
-                <Input id="priceRange" placeholder="e.g., $100-$200" className="h-8" {...register("priceRange")} />
+                <Label htmlFor="priceRange">Budget Range</Label>
+                <Input
+                  id="priceRange"
+                  placeholder="e.g., $100-$200"
+                  className="h-8"
+                  {...register("priceRange")}
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="deliveryDate" >
-                  Desired Delivery Date
-                </Label>
-                <Input id="deliveryDate" type="date" className="h-8" {...register("deliveryDate")} />
+                <Label htmlFor="deliveryDate">Desired Delivery Date</Label>
+                <Input
+                  id="deliveryDate"
+                  type="date"
+                  className="h-8"
+                  {...register("deliveryDate")}
+                />
               </div>
             </div>
 
             {/* Leather Type */}
             <div className="space-y-2">
-              <Label htmlFor="leatherType" >
-                Leather Type
-              </Label>
+              <Label htmlFor="leatherType">Leather Type</Label>
               <Input
                 id="leatherType"
                 placeholder="e.g., Full-grain, Top-grain, Vegetable-tanned"
@@ -302,12 +329,15 @@ export default function CustomizePage() {
             </div>
 
             {/* Other Details */}
-            <div className="space-y-4">
-              <Label >Additional Options</Label>
+            <div className="space-y-2">
+              <Label>Additional Options</Label>
 
               {/* Strap Type */}
               <div className="space-y-2">
-                <Label htmlFor="strapType" className="text-sm font-normal text-muted-foreground">
+                <Label
+                  htmlFor="strapType"
+                  className="text-sm font-normal text-muted-foreground"
+                >
                   Strap Configuration
                 </Label>
                 <Select onValueChange={(value) => setValue("strapType", value)}>
@@ -326,16 +356,24 @@ export default function CustomizePage() {
               <div className="flex items-center space-x-3 p-4 rounded-lg bg-muted/50">
                 <Checkbox
                   id="ecoFriendly"
-                  onCheckedChange={(checked) => setValue("ecoFriendly", checked as boolean)}
+                  onCheckedChange={(checked) =>
+                    setValue("ecoFriendly", checked as boolean)
+                  }
                 />
-                <Label htmlFor="ecoFriendly" className="font-normal cursor-pointer leading-relaxed">
+                <Label
+                  htmlFor="ecoFriendly"
+                  className="font-normal cursor-pointer leading-relaxed"
+                >
                   Eco-Friendly Option (Vegetable-tanned, sustainable leather)
                 </Label>
               </div>
 
               {/* Additional Notes */}
               <div className="space-y-2">
-                <Label htmlFor="otherDetails" className="text-sm font-normal text-muted-foreground">
+                <Label
+                  htmlFor="otherDetails"
+                  className="text-sm font-normal text-muted-foreground"
+                >
                   Special Requests or Notes
                 </Label>
                 <Textarea
@@ -349,7 +387,11 @@ export default function CustomizePage() {
             </div>
 
             {/* Submit Button */}
-            <Button type="submit" variant={"ghost"} className="w-full text-white hover:text-white bg-orange-500 hover:bg-orange-600 ">
+            <Button
+              type="submit"
+              variant={"ghost"}
+              className="w-full text-white hover:text-white bg-orange-500 hover:bg-orange-600 "
+            >
               Submit Your Custom Request
             </Button>
           </form>
@@ -382,9 +424,10 @@ export default function CustomizePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-3xl md:text-4xl font-bold text-foreground leading-tight mb-6"
+            className="text-xl md:text-4xl font-bold text-foreground leading-tight mb-6 "
           >
-            Every piece is a testament to quality — crafted with passion and precision
+            Every piece is a testament to quality — crafted with passion and
+            precision
           </motion.h3>
 
           <motion.p
@@ -393,11 +436,13 @@ export default function CustomizePage() {
             transition={{ delay: 0.4 }}
             className="text-muted-foreground font-serif leading-relaxed text-sm md:text-base max-w-2xl mx-auto"
           >
-            Our artisans bring generations of leather-working expertise to create pieces that age beautifully
-            and last a lifetime. Your custom creation will be ready within <span className="text-foreground font-medium">3–4 weeks</span>.
+            Our artisans bring generations of leather-working expertise to
+            create pieces that age beautifully and last a lifetime. Your custom
+            creation will be ready within{" "}
+            <span className="text-foreground font-medium">3–4 weeks</span>.
           </motion.p>
         </motion.div>
       </section>
     </div>
-  )
+  );
 }

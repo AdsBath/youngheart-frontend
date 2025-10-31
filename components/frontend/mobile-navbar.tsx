@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const NAV_ITEMS = [
   { id: 0, icon: BiHomeAlt2, href: "/", label: "Home" },
-  // { id: 1, icon: GoGift, href: "/offer", label: "Offer" },
+  { id: 1, icon: GoGift, href: "/customize", label: "Custom" },
   { id: 2, icon: MdOutlineShoppingBag, href: "/all-product", label: "Shop" },
   { id: 3, icon: BsCart2, href: "/cart", label: "Cart" },
   { id: 4, icon: FaRegUser, href: "/my-account", label: "Profile" },
@@ -53,16 +53,18 @@ export default function MobileNavbar() {
               <li key={item.id} className="flex-1 flex justify-center">
                 <button
                   onClick={() => dispatch(onCartOpen())}
-                  className={`relative flex flex-col items-center group focus:outline-none ${active ? "text-brand" : "text-gray-500"
-                    }`}
+                  className={`relative flex flex-col items-center group focus:outline-none ${
+                    active ? "text-brand" : "text-gray-500"
+                  }`}
                   aria-label="Open cart"
                   type="button"
                 >
                   <span
-                    className={`flex items-center justify-center p-2 rounded-full transition-all duration-200 ${active
-                      ? "bg-brand/10 text-brand shadow"
-                      : "hover:bg-gray-100"
-                      }`}
+                    className={`flex items-center justify-center p-2 rounded-full transition-all duration-200 ${
+                      active
+                        ? "bg-brand/10 text-brand shadow"
+                        : "hover:bg-gray-100"
+                    }`}
                   >
                     <Icon size={20} />
                   </span>
@@ -84,15 +86,17 @@ export default function MobileNavbar() {
             <li key={item.id} className="flex-1 flex justify-center">
               <Link
                 href={item.href}
-                className={`flex flex-col items-center group ${active ? "text-brand" : "text-gray-500"
-                  }`}
+                className={`flex flex-col items-center group ${
+                  active ? "text-brand" : "text-gray-500"
+                }`}
                 aria-label={item.label}
               >
                 <span
-                  className={`flex items-center justify-center p-2 rounded-full transition-all duration-200 ${active
-                    ? "bg-brand/10 text-brand shadow"
-                    : "hover:bg-gray-100"
-                    }`}
+                  className={`flex items-center justify-center p-2 rounded-full transition-all duration-200 ${
+                    active
+                      ? "bg-brand/10 text-brand shadow"
+                      : "hover:bg-gray-100"
+                  }`}
                 >
                   <Icon size={18} />
                 </span>

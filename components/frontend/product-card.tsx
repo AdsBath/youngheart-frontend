@@ -215,8 +215,8 @@ const ProductCard = ({ product }: any) => {
       discountAmmount:
         parseFloat(product?.discountPrice) > 0
           ? (parseFloat(removeCommas(product?.price)) *
-            parseFloat(product?.discountPrice)) /
-          100
+              parseFloat(product?.discountPrice)) /
+            100
           : 0,
       discount:
         parseFloat(product?.discountPrice) > 0
@@ -294,14 +294,14 @@ const ProductCard = ({ product }: any) => {
 
         {/* Action Buttons - Only show on hover and when in stock */}
         {product?.isAvailable !== "outOfStock" && (
-          <div className="absolute bottom-0 left-0 right-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="absolute bottom-0 left-0 right-0 bg-orange-500/50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="flex items-center justify-center  md:gap-4 md:p-2">
               {/* Add to Bag Button */}
               <button
                 onClick={() => handleAddToCart(product?.id)}
                 className="px-1 py-3 text-white text-xs"
               >
-                ADD TO BAG
+                Add to Bag
               </button>
 
               {/* Divider */}
@@ -310,7 +310,7 @@ const ProductCard = ({ product }: any) => {
               {/* Quick View Button */}
               <Link href={`/product/${product.slug}?view=quick`} passHref>
                 <button className="px-1 py-3 text-white text-xs">
-                  QUICK VIEW
+                  Quick View
                 </button>
               </Link>
             </div>

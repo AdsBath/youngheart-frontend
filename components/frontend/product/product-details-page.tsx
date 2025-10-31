@@ -27,12 +27,6 @@ import { QuantitySelector } from "./QuantitySelector";
 import { ShareButtons } from "./ShareButtons";
 import { SizeSelector } from "./SizeSelector";
 
-const font = Noto_Serif({
-  weight: ["400", "500", "600", "700", "500"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  display: "swap",
-});
 const ProductDetails = ({ product }: { product: any }) => {
   const [buyLoading, setBuyLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -57,8 +51,8 @@ const ProductDetails = ({ product }: { product: any }) => {
       discountAmmount:
         parseFloat(product?.discountPrice) > 0
           ? (parseFloat(removeCommas(product?.price)) *
-            parseFloat(product?.discountPrice)) /
-          100
+              parseFloat(product?.discountPrice)) /
+            100
           : 0,
       discount:
         parseFloat(product?.discountPrice) > 0
@@ -93,8 +87,8 @@ const ProductDetails = ({ product }: { product: any }) => {
       discountAmmount:
         parseFloat(product?.discountPrice) > 0
           ? (parseFloat(removeCommas(product?.price)) *
-            parseFloat(product?.discountPrice)) /
-          100
+              parseFloat(product?.discountPrice)) /
+            100
           : 0,
       discount:
         parseFloat(product?.discountPrice) > 0
@@ -274,7 +268,7 @@ const ProductDetails = ({ product }: { product: any }) => {
         </TabsList>
 
         <TabsContent value="description">
-          <Preview value={product?.description} className={font.className} />
+          <Preview value={product?.description} className={"text-base"} />
         </TabsContent>
         <TabsContent value="details">
           <Preview value={product?.productDetails} />

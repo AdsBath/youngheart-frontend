@@ -27,6 +27,7 @@ import { useMyWishlistQuery } from "@/redux/api/wishlistApi";
 import { useRouter } from "next/navigation";
 import Search from "../search";
 import { IconSearch } from "@tabler/icons-react";
+import TopBanner from "./top-banner";
 
 interface Category {
   id: string;
@@ -241,7 +242,7 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <motion.div
+      {/* <motion.div
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -262,8 +263,8 @@ const Navbar: React.FC = () => {
             </div>
           </div>
         </div>
-      </motion.div>
-
+      </motion.div> */}
+      <TopBanner />
       <div className="sticky top-0 z-40 bg-white border-b shadow-sm backdrop-blur-sm bg-white/95">
         <div className="px-4 sm:px-6 md:px-16">
           <div className="flex items-center justify-between py-1 md:py-2">
@@ -322,6 +323,12 @@ const Navbar: React.FC = () => {
             </Link>
 
             <nav className="hidden xl:flex items-center space-x-2">
+              <Link
+                href={`/customize`}
+                className="text-gray-700 hover:text-orange-500 transition-colors font-medium py-2 px-3 rounded-md hover:bg-orange-50"
+              >
+                Customize
+              </Link>
               {categories?.map((category) => (
                 <div key={category.id} className="relative group">
                   {category.children && category.children.length > 0 ? (
