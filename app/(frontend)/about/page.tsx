@@ -17,7 +17,7 @@ export default function AboutPage() {
       <section className="relative">
         <div
           className="w-full h-48 md:h-64 bg-center bg-cover"
-          style={{ backgroundImage: "url('/luxury-leather-texture.png')" }}
+          style={{ backgroundImage: "url('/yh-about.jpg')" }}
         />
         <div className="container mx-auto px-4 -mt-12 md:-mt-16">
           <Card className="mx-auto max-w-4xl">
@@ -54,7 +54,7 @@ export default function AboutPage() {
               </p>
             </CardContent>
           </Card>
-          <div className="rounded-lg bg-[url('/custom-leather-bag.png')] bg-cover bg-center min-h-56 md:min-h-72 border" />
+          <div className="rounded-lg bg-[url('/yh-about-m.jpg')] bg-cover bg-center min-h-56 md:min-h-72 border" />
         </div>
       </section>
 
