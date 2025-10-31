@@ -28,10 +28,6 @@ const MyAccountPage = ({ profile }: MyAccountPageProps) => {
   const [logout] = useLogoutMutation();
 
   const handleLogout = async () => {
-    console.log({
-      refreshToken: cookies.refreshToken,
-      sessionId: cookies.sessionId,
-    });
     const result: any = await logout({});
     if (result?.data?.success) {
       removeCookie("refreshToken", { path: "/" }); // Ensure the path matches where the cookie was set

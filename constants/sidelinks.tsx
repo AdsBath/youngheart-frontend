@@ -240,13 +240,13 @@ export const sideLinks = (role: string) => {
           href: "/dashboard/applicant",
           icon: <IconSettings size={18} />,
         },
-        {
-          title: "Custom Design",
-          label: "",
-          href: "/dashboard/custom-design",
-          icon: <IconKeyframesFilled size={18} />,
-        },
       ],
+    },
+    {
+      title: "Customize Request",
+      label: "",
+      href: "/dashboard/custom-design",
+      icon: <IconKeyframesFilled size={18} />,
     },
     {
       title: "Settings",
@@ -424,13 +424,13 @@ export const sideLinks = (role: string) => {
           href: "/dashboard/applicant",
           icon: <IconPaperclip size={18} />,
         },
-        {
-          title: "Custom Design",
-          label: "",
-          href: "/dashboard/custom-design",
-          icon: <IconKeyframesFilled size={18} />,
-        },
       ],
+    },
+    {
+      title: "Customize Request",
+      label: "",
+      href: "/dashboard/custom-design",
+      icon: <IconKeyframesFilled size={18} />,
     },
     {
       title: "Settings",

@@ -10,7 +10,7 @@ const CustomDesignList = () => {
     useCustomDesignsQuery({});
 
   const customDesignData = customDesign?.data?.data;
-
+  console.log({ customDesignData, isCustomDesignLoading });
   return (
     <>
       <div className="mb-2 md:flex items-center justify-between space-y-2 ">

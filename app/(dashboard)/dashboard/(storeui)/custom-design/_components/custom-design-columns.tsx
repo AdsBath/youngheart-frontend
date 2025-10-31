@@ -1,172 +1,107 @@
-import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
 import { DataTableRowActions } from "./data-table-row-actions";
-import BlurImage from "@/components/ui/blur-image";
 
 export const customDesignColumns: ColumnDef<any>[] = [
+  // Single consolidated card with Customer, Order and Product Design
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px]"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px]"
-      />
-    ),
-    enableSorting: true,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "designImage",
+    id: "request",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Image" />
+      <DataTableColumnHeader column={column} title="Custom Design Request" />
     ),
-
     cell: ({ row }) => {
+      const original = row.original as any;
+      const pd = original?.productDesign || {};
+
+      const fullName =
+        [original?.firstName, original?.lastName].filter(Boolean).join(" ") ||
+        "N/A";
+      const delivery = original?.deliveryDate
+        ? format(new Date(original.deliveryDate), "dd MMM yyyy")
+        : "N/A";
+      const created = original?.createdAt
+        ? format(new Date(original.createdAt), "dd MMM yyyy hh:mm a")
+        : "N/A";
+
+      const designItems: Array<{ label: string; value: any }> = [
+        { label: "Product Type", value: pd.productType },
+        { label: "Leather Color", value: pd.leatherColor },
+        { label: "Leather Type", value: pd.leatherType },
+        { label: "Lining Type", value: pd.liningType },
+        { label: "Lining Color", value: pd.liningColor },
+        { label: "Metal Color", value: pd.metalColor },
+        { label: "Stitching Color", value: pd.stitchingColor },
+        { label: "Personalization", value: pd.personalizationType },
+        { label: "Personalization Text", value: pd.personalizationText },
+        { label: "Size", value: pd.size },
+        { label: "Price Range", value: pd.priceRange },
+        {
+          label: "Delivery Date",
+          value: pd.deliveryDate
+            ? format(new Date(pd.deliveryDate), "dd MMM yyyy")
+            : undefined,
+        },
+        { label: "Strap Type", value: pd.strapType },
+        { label: "Eco Friendly", value: pd.ecoFriendly ? "Yes" : "No" },
+        { label: "Other Details", value: pd.otherDetails },
+      ];
+
       return (
-        <div className="w-10 h-10 aspect-square rounded-lg overflow-hidden">
-          <BlurImage
-            alt="designImage"
-            src={row.getValue("designImage") ?? ""}
-          />
+        <div className="w-full rounded-md border p-3 bg-background">
+          {/* Customer */}
+          <div className="flex flex-col gap-1">
+            <div className="font-semibold text-base">{fullName}</div>
+            <div className="text-sm text-muted-foreground">
+              {original?.email || "N/A"}
+            </div>
+            <div>
+              <Badge variant="secondary">{original?.phone || "N/A"}</Badge>
+            </div>
+          </div>
+
+          {/* Order meta */}
+          <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-4">
+            <div className="text-sm">
+              <div className="text-muted-foreground">Design Type</div>
+              <div className="font-medium">{original?.designType || "N/A"}</div>
+            </div>
+            <div className="text-sm">
+              <div className="text-muted-foreground">Quantity</div>
+              <div className="font-medium">
+                {original?.numberOfDesigns || "N/A"}
+              </div>
+            </div>
+            <div className="text-sm">
+              <div className="text-muted-foreground">Delivery</div>
+              <div className="font-medium">{delivery}</div>
+            </div>
+            <div className="text-sm">
+              <div className="text-muted-foreground">Created</div>
+              <div className="font-medium">{created}</div>
+            </div>
+          </div>
+
+          {/* Product Design */}
+          <div className="mt-4">
+            <div className="text-sm font-semibold mb-2">Product Design</div>
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+              {designItems.map((item) => (
+                <div key={item.label} className="text-sm">
+                  <div className="text-muted-foreground">{item.label}</div>
+                  <div className="font-medium break-words">
+                    {item.value ?? "—"}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       );
     },
     enableSorting: false,
-    enableHiding: true,
-  },
-  {
-    accessorKey: "firstName",
-    id: "firstName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
-    ),
-    cell: ({ row }) => (
-      <div className="w-full">
-        <p>{row.getValue("firstName") ?? "N/A"}</p>
-      </div>
-    ),
-    enableSorting: true,
-    enableHiding: true,
-  },
-  {
-    accessorKey: "email",
-    id: "email",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Email" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="w-full">
-          <p>{row.getValue("email") ?? "N/A"}</p>
-        </div>
-      );
-    },
-    enableSorting: true,
-    enableHiding: true,
-  },
-  {
-    accessorKey: "phone",
-    id: "phone",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Phone" />
-    ),
-    cell: ({ row }) => (
-      <div className="w-full">
-        <Badge variant="secondary">{row.getValue("phone") ?? "N/A"}</Badge>
-      </div>
-    ),
-    enableSorting: true,
-    enableHiding: true,
-  },
-  {
-    accessorKey: "designType",
-    id: "designType",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Design Type" />
-    ),
-    cell: ({ row }) => (
-      <div className="w-full">
-        <p>{row.getValue("designType") ?? "N/A"}</p>
-      </div>
-    ),
-    enableSorting: true,
-    enableHiding: true,
-  },
-  {
-    accessorKey: "numberOfDesigns",
-    id: "numberOfDesigns",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Quantity" />
-    ),
-    cell: ({ row }) => (
-      <div className="w-full">
-        <p>{row.getValue("numberOfDesigns") ?? "N/A"}</p>
-      </div>
-    ),
-    enableSorting: true,
-    enableHiding: true,
-  },
-  {
-    accessorKey: "deliveryDate",
-    id: "deliveryDate",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Delivery Date" />
-    ),
-    cell: ({ row }) => {
-      const date = row.getValue("deliveryDate");
-
-      return (
-        <div className="w-full">
-          <Badge>
-            {(date as string) && (
-              <span>
-                {format(
-                  new Date(row.getValue("deliveryDate")),
-                  "dd MMM yyyy hh:mm a"
-                )}
-              </span>
-            )}
-          </Badge>
-        </div>
-      );
-    },
-    enableSorting: true,
-    enableHiding: true,
-  },
-  {
-    accessorKey: "createdAt",
-    id: "createdAt",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="CreatedAt" />
-    ),
-    cell: ({ row }) => (
-      <div className="w-full">
-        <Badge>
-          <span>
-            {format(row.getValue("createdAt"), "dd MMM yyyy hh:mm a")}
-          </span>
-        </Badge>
-      </div>
-    ),
-    enableSorting: true,
     enableHiding: true,
   },
   {

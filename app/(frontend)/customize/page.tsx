@@ -14,11 +14,15 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { FaRegGem, FaLeaf, FaTools } from "react-icons/fa";
-import { GiLeatherArmor, GiHand } from "react-icons/gi";
+import { FaRegGem } from "react-icons/fa";
+import { GiHand } from "react-icons/gi";
 import { MdOutlineDesignServices } from "react-icons/md";
+import { toast } from "sonner";
+import { useState } from "react";
+import { useCreateCustomDesignMutation } from "@/redux/api/customDesignApi";
+import { Loader2 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 type CustomizationFormData = {
   productType: string;
@@ -39,11 +43,17 @@ type CustomizationFormData = {
 };
 
 export default function CustomizePage() {
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [createCustomDesign, { isLoading: createCustomDesignLoading }] =
+    useCreateCustomDesignMutation();
+
   const {
     register,
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<CustomizationFormData>({
     defaultValues: {
@@ -72,9 +82,46 @@ export default function CustomizePage() {
     },
   ];
 
-  const onSubmit = (data: CustomizationFormData) => {
-    console.log("[v0] Form submitted:", data);
-    // Handle form submission here
+  const onSubmit = async (data: CustomizationFormData) => {
+    try {
+      setLoading(true);
+      // Build payload for Prisma model
+      const payload = {
+        wantCustomDesign: "Yes",
+        designType: "Custom Leather Product",
+        numberOfDesigns: "1",
+        deliveryDate: data.deliveryDate,
+        hasImage: "false",
+        firstName: user?.firstName || "Someone", // ⚠️ Replace with actual user input if you collect it
+        lastName: user?.lastName || "Human",
+        phone: user?.phone || "01*********",
+        email: user?.email || "Someone@gmail.com",
+        additionalDetails: data.otherDetails || null,
+        productDesign: data, // Your JSON field 👌
+      };
+
+      console.log("Submitting payload:", payload);
+
+      // const response = await fetch("/api/custom-design", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(payload),
+      // });
+
+      const res = await createCustomDesign(payload);
+      console.log(res);
+      if (res?.data?.statusCode === 200 && res?.data?.success) {
+        toast.success("Wait for sometimes confirmation call untill");
+        reset();
+      } else {
+        toast.error("Failed to submit custom request");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("❌ Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -389,10 +436,17 @@ export default function CustomizePage() {
             {/* Submit Button */}
             <Button
               type="submit"
+              disabled={loading || createCustomDesignLoading || !user}
               variant={"ghost"}
               className="w-full text-white hover:text-white bg-orange-500 hover:bg-orange-600 "
             >
-              Submit Your Custom Request
+              {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+              <span>
+                {" "}
+                {user
+                  ? "Submit Your Custom Request"
+                  : "Login to Submit Your Custom Request"}
+              </span>
             </Button>
           </form>
         </div>

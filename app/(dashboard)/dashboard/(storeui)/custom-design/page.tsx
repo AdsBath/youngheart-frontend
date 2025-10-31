@@ -22,10 +22,10 @@ export default function CustomDesign() {
           <Breadcrumbs
             items={[
               {
-                label: "Manage Career",
-                href: "/dashboard/career",
+                label: "Manage Custom Design",
+                href: "/dashboard/custom-design",
               },
-              { label: "Career List" },
+              { label: "Request List" },
             ]}
           />
           <div className="ml-auto flex items-center space-x-4">
