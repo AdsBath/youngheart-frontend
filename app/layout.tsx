@@ -4,6 +4,7 @@ import Providers from "@/lib/providers"
 import { SheetProviderFrontend } from "@/lib/sheet-provider-frontend"
 import AuthProvider from "@/provider/AuthProvider"
 import type { Metadata, Viewport } from "next"
+import Script from "next/script"
 import { Fira_Sans, Manrope } from "next/font/google"
 import "./globals.css"
 
@@ -138,6 +139,15 @@ export default function RootLayout({
             <body className="font-sans antialiased">
                 <Providers>
                     <AuthProvider>
+                        <div id="fb-root" />
+                        <Script
+                            id="facebook-sdk"
+                            strategy="afterInteractive"
+                            dangerouslySetInnerHTML={{
+                                __html:
+                                    "window.fbAsyncInit=function(){FB.init({appId:'979499980533488',xfbml:true,version:'v20.0'});};(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src='https://connect.facebook.net/en_US/sdk.js';fjs.parentNode.insertBefore(js,fjs);}(document,'script','facebook-jssdk'));",
+                            }}
+                        />
                         <SheetProviderFrontend />
                         {children}
                         <Toaster />

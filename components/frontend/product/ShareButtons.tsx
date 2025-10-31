@@ -27,7 +27,7 @@ export const ShareButtons = ({ shareUrl }: { shareUrl: string }) => {
       <WhatsappShareButton url={shareUrl} title="Check out this product!">
         <WhatsappIcon size={40} round borderRadius={10} />
       </WhatsappShareButton>
-      <FacebookMessengerShareButton appId="123456789" url={shareUrl}>
+      <FacebookMessengerShareButton appId="979499980533488" url={shareUrl}>
         <FacebookMessengerIcon size={40} round borderRadius={10} />
       </FacebookMessengerShareButton>
       <button onClick={copyToClip} className="flex items-center text-brand">
