@@ -5,6 +5,7 @@ import { SheetProviderFrontend } from "@/lib/sheet-provider-frontend";
 import AuthProvider from "@/provider/AuthProvider";
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import GTMPageView from "@/components/analytics/GTM";
 import { Fira_Sans, Manrope } from "next/font/google";
 import "./globals.css";
 
@@ -150,16 +151,15 @@ export default function RootLayout({
         </noscript>
         {/* End Google Tag Manager (noscript) */}
 
-        {/* Google Tag Manager */}
-        <Script
-          id="gtm-base"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html:
-              "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({\\'gtm.start\\': new Date().getTime(),event:\\'gtm.js\\'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KGZF6KQQ');",
-          }}
-        />
-        {/* End Google Tag Manager */}
+        {/* Google Tag Manager base */}
+        <Script id="gtm-base" strategy="afterInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KGZF6KQQ');`}
+        </Script>
+        {/* End Google Tag Manager base */}
         <Providers>
           <AuthProvider>
             <div id="fb-root" />
@@ -172,6 +172,8 @@ export default function RootLayout({
               }}
             />
             <SheetProviderFrontend />
+            {/* Push pageview on SPA route changes */}
+            <GTMPageView />
             {children}
             <Toaster />
           </AuthProvider>
