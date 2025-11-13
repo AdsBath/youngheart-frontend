@@ -13,8 +13,8 @@ import { memo, useRef } from "react";
 const ProductCategory = ({ categoriesData }: any) => {
   const plugin = useRef(Autoplay({ delay: 3000 }));
   return (
-    <section className="py-6 lg:py-10 flex items-center justify-center px-2">
-      <div className="container">
+    <section className="py-2 lg:py-8 px-2 flex items-center justify-center">
+      <div className="container mx-auto">
         {categoriesData && categoriesData?.length === 0 ? (
           // Skeleton loader for better UX during data fetch
           <div className="flex gap-5 justify-center">
@@ -38,7 +38,7 @@ const ProductCategory = ({ categoriesData }: any) => {
               {categoriesData?.map((category: any) => (
                 <CarouselItem
                   key={category.id}
-                  className="basis-[30%] sm:basis-[25%] md:basis-[20%] lg:basis-[12.5%] xl:basis-[10%] pl-2"
+                  className="basis-[25%] sm:basis-[27%] lg:basis-[12%] xl:basis-[10%] pl-2"
                 >
                   <div className="relative flex flex-col items-center   group">
                     {/* Optimized image for lazy loading */}

@@ -10,10 +10,12 @@ import { useShippingRulesQuery } from "@/redux/api/shippingRulesApi";
 import { useUserBySessionIdQuery } from "@/redux/api/userApi";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
+import { trackViewCart } from "@/lib/ga4-events";
 
 import { IconCash } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
+import { useEffect } from "react";
 
 const Cart = () => {
   const router = useRouter();
@@ -33,22 +35,25 @@ const Cart = () => {
     useShippingRulesQuery({});
 
   const cart = cartData?.data;
-  // const cartItems = cart?.cartItems?.map((cartItem: any) => {
-  //   const product = productsData?.data?.data?.find(
-  //     (product: any) => product.id === cartItem.productId
-  //   );
-  //   return { ...cartItem, product };
-  // });
+  
+  // Map cart items with product data for tracking
+  const cartItemsWithProducts = cartItems?.map((cartItem: any) => {
+    const product = productsData?.data?.data?.find(
+      (product: any) => product.id === cartItem.productId
+    );
+    return { ...cartItem, product };
+  });
 
-  // const sortedCartItems: any[] = cartItems?.sort((a: any, b: any) => {
-  //   const dateA = a.createdAt ? new Date(a.createdAt) : null;
-  //   const dateB = b.createdAt ? new Date(b.createdAt) : null;
-
-  //   if (dateA && dateB) {
-  //     return dateB.getTime() - dateA.getTime();
-  //   }
-  //   return 0;
-  // });
+  // Track view_cart event when cart page loads
+  useEffect(() => {
+    if (
+      cartItemsWithProducts &&
+      cartItemsWithProducts.length > 0 &&
+      productsData?.data?.data
+    ) {
+      trackViewCart(cartItemsWithProducts, productsData.data.data);
+    }
+  }, [cartItemsWithProducts, productsData]);
 
   const subtotal =
     cartItems?.reduce(

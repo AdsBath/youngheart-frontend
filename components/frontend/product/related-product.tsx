@@ -72,7 +72,7 @@ const RelatedProduct = ({ categoryId }: { categoryId: string }) => {
   );
 
   return (
-    <section className="py-5 md:container mx-auto px-2 md:px-10 xl:px-0 mt-5">
+    <section className="py-5 mx-auto px-2 md:px-12">
       <h2 className="text-2xl font-semibold text-start mb-6">
         Similar Products
       </h2>
@@ -92,7 +92,7 @@ const RelatedProduct = ({ categoryId }: { categoryId: string }) => {
               {publishedProducts?.map((product: any) => (
                 <CarouselItem
                   key={product.id}
-                  className="basis-[80%] md:basis-[35%] lg:basis-[24%] px-2"
+                  className="basis-[65%] md:basis-[33%] lg:basis-[22%]  xl:basis-[18%] px-2"
                 >
                   <div className="h-full">
                     <ProductCard product={product} />
@@ -109,10 +109,11 @@ const RelatedProduct = ({ categoryId }: { categoryId: string }) => {
               {Array.from({ length: count }).map((_, index) => (
                 <button
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-colors duration-200 ${index + 1 === current
+                  className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                    index + 1 === current
                       ? "bg-black dark:bg-white"
                       : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
-                    }`}
+                  }`}
                   onClick={() => scrollTo(index)}
                   aria-label={`Go to slide ${index + 1}`}
                 />

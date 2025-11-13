@@ -246,25 +246,38 @@ const ProductCard = ({ product }: any) => {
   );
 
   return (
-    <div className="group relative bg-white rounded-lg overflow-hidden hover:border hover:border-[#f97316] transition-all duration-300 ">
+    <div className="group relative bg-white  overflow-hidden  transition-all duration-300 ">
       {/* Image Container */}
-      <div className="relative aspect-[3/4] overflow-hidden bg-[#f4f4f4]">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-[#f4f4f4]">
         <link
           rel="preload"
           as="image"
           href={product.thumbnail || "https://via.placeholder.com/400x533"}
         />
-        <Image
-          fill
+        <Link
+          href={`/product/${product.slug}`}
+          passHref
           className={cn(
-            "object-cover transition-all duration-500 group-hover:scale-105",
-            loadedImg ? "blur-none" : "blur-md"
+            "",
+            loadedImg ? "blur-none" : "blur-md",
+            product?.isAvailable !== "outOfStock"
+              ? "cursor-pointer"
+              : "cursor-not-allowed"
           )}
-          onLoad={() => setLoadedImg(true)}
-          alt={product?.name}
-          src={product.thumbnail || "https://via.placeholder.com/400x533"}
-          priority
-        />
+        >
+          <Image
+            fill
+            className={cn(
+              "object-cover transition-all duration-500 group-hover:scale-105 ",
+              loadedImg ? "blur-none" : "blur-md"
+            )}
+            onLoad={() => setLoadedImg(true)}
+            alt={product?.name}
+            src={product.thumbnail || "https://via.placeholder.com/400x533"}
+            priority
+            onClick={() => router.push(`/product/${product.slug}`)}
+          />
+        </Link>
 
         {/* Wishlist Button */}
         <button
@@ -293,10 +306,9 @@ const ProductCard = ({ product }: any) => {
         )}
 
         {/* Action Buttons - Only show on hover and when in stock */}
-        {product?.isAvailable !== "outOfStock" && (
+        {/* {product?.isAvailable !== "outOfStock" && (
           <div className="absolute bottom-0 left-0 right-0 bg-orange-500/50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="flex items-center justify-center  md:gap-4 md:p-2">
-              {/* Add to Bag Button */}
               <button
                 onClick={() => handleAddToCart(product?.id)}
                 className="px-1 py-3 text-white text-xs"
@@ -304,10 +316,8 @@ const ProductCard = ({ product }: any) => {
                 Add to Bag
               </button>
 
-              {/* Divider */}
               <div className="h-6 w-px bg-gray-500" />
 
-              {/* Quick View Button */}
               <Link href={`/product/${product.slug}?view=quick`} passHref>
                 <button className="px-1 py-3 text-white text-xs">
                   Quick View
@@ -315,12 +325,12 @@ const ProductCard = ({ product }: any) => {
               </Link>
             </div>
           </div>
-        )}
+        )} */}
       </div>
       {/* Product Info */}
-      <div className="p-0.5 space-y-3">
+      <div className="p-0.5 ">
         {/* Product Name */}
-        <h3 className="font-medium text-gray-900 text-sm leading-tight line-clam">
+        <h3 className="font-medium text-gray-900 text-lg md:text-xl leading-tight line-clam">
           {product?.name}
         </h3>
 

@@ -9,7 +9,6 @@ import React from "react";
 const Page = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-
   const { data, isLoading } = usePageLinkQuery(id);
 
   if (isLoading) {
@@ -40,7 +39,6 @@ const Page = () => {
     );
   }
 
-  // console.log(data);
   return (
     <div className="min-h-screen">
       <div className="bg-bandBlack h-[20vh] sm:h-[30vh] flex items-center">

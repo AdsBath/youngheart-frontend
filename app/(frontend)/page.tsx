@@ -1,8 +1,8 @@
 import CustomCarousel from "@/components/frontend/home/custom-carousel";
-import OfferPage from "@/components/frontend/home/offer-page";
+// import OfferPage from "@/components/frontend/home/offer-page";
 import ProductCategory from "@/components/frontend/home/product-category";
 import ProductCollection from "@/components/frontend/home/product-collection";
-import Features from "@/components/frontend/home/product-feature";
+// import Features from "@/components/frontend/home/product-feature";
 import ScrollToTopButton from "@/components/frontend/home/scroll-to-top-button";
 import { BASE_URL } from "@/utils/base-url";
 import type { Metadata } from "next";
@@ -10,7 +10,8 @@ import type { Metadata } from "next";
 // Metadata for SEO optimization
 export const metadata: Metadata = {
   title: "Youngheart | Your One-Stop Shop for  Bags",
-  description: "Discover amazing deals and a wide range of products at Youngheart. Shop now and enjoy exclusive discounts and offers!",
+  description:
+    "Discover amazing deals and a wide range of products at Youngheart. Shop now and enjoy exclusive discounts and offers!",
   keywords:
     "youngheart, online shopping, ecommerce, discounts, offers, product features, collections",
 };

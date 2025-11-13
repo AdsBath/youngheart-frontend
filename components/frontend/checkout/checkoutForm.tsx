@@ -55,6 +55,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import {
+  trackBeginCheckout,
+  trackAddShippingInfo,
+  trackAddPaymentInfo,
+} from "@/lib/ga4-events";
 
 const checkoutFormSchema = z.object({
   firstName: z.string().min(2, {
@@ -187,7 +192,25 @@ export default function CheckoutForm({
         setShippingCost(getShippingData?.shippingCost);
       }
     }
-  }, [district, shippingRulesData, hasFreeShipping]);
+
+    // Track add_shipping_info when district is selected and form is filled
+    if (
+      district &&
+      watchValues.address &&
+      watchValues.city &&
+      cartItems &&
+      cartItems.length > 0 &&
+      productsData?.data?.data
+    ) {
+      const shippingTier = district === "Dhaka" ? "In-side Dhaka" : "Out-side Dhaka";
+      trackAddShippingInfo(
+        cartItems,
+        productsData.data.data,
+        shippingTier,
+        couponCode || undefined
+      );
+    }
+  }, [district, shippingRulesData, hasFreeShipping, watchValues.address, watchValues.city, cartItems, productsData, couponCode]);
 
   const districtData = districts.find(
     (districtItem: any) => districtItem.name === district
@@ -215,6 +238,17 @@ export default function CheckoutForm({
     );
     return { ...cartItem, product };
   });
+
+  // Track begin_checkout event when checkout page loads
+  useEffect(() => {
+    if (cartItems && cartItems.length > 0 && productsData?.data?.data) {
+      trackBeginCheckout(
+        cartItems,
+        productsData.data.data,
+        couponCode || undefined
+      );
+    }
+  }, [cartItems, productsData, couponCode]);
 
   const discountPrice =
     useMemo(() => {
@@ -1131,7 +1165,25 @@ export default function CheckoutForm({
                   render={({ field }) => (
                     <RadioGroup
                       value={field.value}
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        // Track add_payment_info when payment method is selected
+                        if (
+                          value &&
+                          cartItems &&
+                          cartItems.length > 0 &&
+                          productsData?.data?.data
+                        ) {
+                          const paymentType =
+                            value === "cod" ? "Cash on Delivery" : "Bank Transfer";
+                          trackAddPaymentInfo(
+                            cartItems,
+                            productsData.data.data,
+                            paymentType,
+                            couponCode || undefined
+                          );
+                        }
+                      }}
                     >
                       <div className="mt-3 border w-full rounded flex flex-col gap-2 p-3">
                         <div className="p-2">

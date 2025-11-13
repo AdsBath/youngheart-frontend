@@ -26,6 +26,7 @@ import { Preview } from "./preview";
 import { QuantitySelector } from "./QuantitySelector";
 import { ShareButtons } from "./ShareButtons";
 import { SizeSelector } from "./SizeSelector";
+import { trackViewItem, trackAddToCart } from "@/lib/ga4-events";
 
 const ProductDetails = ({ product }: { product: any }) => {
   const [buyLoading, setBuyLoading] = useState(false);
@@ -68,6 +69,8 @@ const ProductDetails = ({ product }: { product: any }) => {
       const res = await createCart(data).unwrap();
       if (res?.statusCode === 200 && res?.success) {
         setCookie("sessionId", res.data.sessionId);
+        // Track add_to_cart event
+        trackAddToCart(product, data);
       } else {
         toast.error(res?.error);
       }
@@ -120,6 +123,13 @@ const ProductDetails = ({ product }: { product: any }) => {
     }
   }, [product]);
 
+  // Track view_item event when product is viewed
+  useEffect(() => {
+    if (product) {
+      trackViewItem(product);
+    }
+  }, [product]);
+
   const getAgeVariants = useMemo(() => {
     return product?.variations
       ?.map((item: any) => item.age)
@@ -143,147 +153,153 @@ const ProductDetails = ({ product }: { product: any }) => {
   }, [product?.images]);
 
   return (
-    <div className="container px-0">
-      <div className="flex flex-col md:flex-row my-10">
-        <div className="h-full w-full basis-full lg:basis-4/6 ">
-          <Suspense fallback={<div className="aspect-square h-full" />}>
-            <Gallery
-              images={[product?.thumbnail, ...sortImage]?.map((image: any) => ({
-                src: image,
-                altText: image,
-              }))}
-              setSelectedImage={setSelectedImage}
-            />
-          </Suspense>
+    <>
+      <div className="container px-0">
+        <div className="flex flex-col md:flex-row my-10">
+          <div className="h-full w-full basis-full lg:basis-4/6 ">
+            <Suspense fallback={<div className="aspect-square h-full" />}>
+              <Gallery
+                images={[product?.thumbnail, ...sortImage]?.map(
+                  (image: any) => ({
+                    src: image,
+                    altText: image,
+                  })
+                )}
+                setSelectedImage={setSelectedImage}
+              />
+            </Suspense>
+          </div>
+
+          <div className="md:w-1/2 md:pl-8 mt-4 md:mt-0 px-2">
+            <h1 className="text-xl md:text-3xl font-bold mb-2">
+              {product?.name}
+            </h1>
+            <p className="text-gray-700 mb-4 text-sm">
+              {product?.shortDescription}
+            </p>
+
+            <div className="text-red-500 font-bold text-4xl mb-4">
+              ৳{" "}
+              {product?.discountPrice > 0
+                ? calculateDiscount(product?.price, product?.discountPrice)
+                : product?.price}
+              {product?.discountPrice > 0 && (
+                <span className="line-through text-gray-600 text-lg">
+                  {" "}
+                  ৳ {product?.price}{" "}
+                </span>
+              )}
+              {product?.bundleDiscountId && (
+                <span className=" text-brand ml-4 text-sm">
+                  {" "}
+                  {product?.bundleDiscount?.name}{" "}
+                </span>
+              )}
+            </div>
+
+            <Separator className="my-2" />
+
+            <p className="text-sm font-normal mb-2">
+              SKU: <strong>{product?.sku}</strong>
+            </p>
+
+            {getColorVariants?.length > 0 && (
+              <ColorSelector
+                colors={getColorVariants}
+                selectedColor={color}
+                setColor={setColor}
+              />
+            )}
+            {getSizeVariants?.length > 0 && (
+              <SizeSelector
+                sizes={getSizeVariants}
+                selectedSize={size}
+                setSize={setSize}
+              />
+            )}
+            {getAgeVariants?.length > 0 && (
+              <AgeSelector
+                ages={getAgeVariants}
+                selectedAge={age}
+                setAge={setAge}
+              />
+            )}
+
+            <div>
+              <div className="flex gap-2 my-2 text-xs text-blue-600">
+                <span>
+                  {product?.isAvailable === "inStock"
+                    ? "In Stock"
+                    : "Out Of Stock"}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex gap-2 flex-col md:flex-row">
+              <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
+
+              <div className="flex flex-1  gap-3">
+                <Button
+                  onClick={() => handleAddToCart(product?.id)}
+                  className="bg-[#f97316] hover:bg-[#f97316]"
+                  size="lg"
+                  disabled={
+                    product?.isAvailable !== "inStock" ||
+                    isLoading ||
+                    buyLoading
+                  }
+                >
+                  {!buyLoading && isLoading && (
+                    <IconLoader className="animate-spin" size={17} />
+                  )}
+                  Add to Cart
+                </Button>
+
+                <Button
+                  onClick={() => handleBuyNow(product?.id)}
+                  variant="secondary"
+                  size="lg"
+                  disabled={buyLoading || product?.isAvailable !== "inStock"}
+                  className="text-[#f97316]"
+                >
+                  {buyLoading && (
+                    <IconLoader className="animate-spin" size={17} />
+                  )}
+                  Buy Now
+                </Button>
+              </div>
+            </div>
+
+            <ShareButtons shareUrl={shareUrl} />
+          </div>
         </div>
 
-        <div className="md:w-1/2 md:pl-8 mt-4 md:mt-0 px-2">
-          <h1 className="text-xl md:text-3xl font-bold mb-2">
-            {product?.name}
-          </h1>
-          <p className="text-gray-700 mb-4 text-sm">
-            {product?.shortDescription}
-          </p>
+        <Tabs defaultValue="description" className="w-full">
+          <TabsList className="w-full justify-start">
+            <TabsTrigger value="description">Description</TabsTrigger>
+            <TabsTrigger value="details">Product Details</TabsTrigger>
+            {/* <TabsTrigger value="instructions">Care Instructions</TabsTrigger>
+            <TabsTrigger value="faq">FAQ</TabsTrigger> */}
+          </TabsList>
 
-          <div className="text-red-500 font-bold text-4xl mb-4">
-            ৳{" "}
-            {product?.discountPrice > 0
-              ? calculateDiscount(product?.price, product?.discountPrice)
-              : product?.price}
-            {product?.discountPrice > 0 && (
-              <span className="line-through text-gray-600 text-lg">
-                {" "}
-                ৳ {product?.price}{" "}
-              </span>
-            )}
-            {product?.bundleDiscountId && (
-              <span className=" text-brand ml-4 text-sm">
-                {" "}
-                {product?.bundleDiscount?.name}{" "}
-              </span>
-            )}
-          </div>
+          <TabsContent value="description">
+            <Preview value={product?.description} className={"text-base"} />
+          </TabsContent>
+          <TabsContent value="details">
+            <Preview value={product?.productDetails} />
+          </TabsContent>
+          {/* <TabsContent value="instructions">
+            <CareInstructions />
+          </TabsContent>
+          <TabsContent value="faq">
+            <ProductAccordion />
+          </TabsContent> */}
+        </Tabs>
 
-          <Separator className="my-2" />
-
-          <p className="text-sm font-normal mb-2">
-            SKU: <strong>{product?.sku}</strong>
-          </p>
-
-          {getColorVariants?.length > 0 && (
-            <ColorSelector
-              colors={getColorVariants}
-              selectedColor={color}
-              setColor={setColor}
-            />
-          )}
-          {getSizeVariants?.length > 0 && (
-            <SizeSelector
-              sizes={getSizeVariants}
-              selectedSize={size}
-              setSize={setSize}
-            />
-          )}
-          {getAgeVariants?.length > 0 && (
-            <AgeSelector
-              ages={getAgeVariants}
-              selectedAge={age}
-              setAge={setAge}
-            />
-          )}
-
-          <div>
-            <div className="flex gap-2 my-2 text-xs text-blue-600">
-              <span>
-                {product?.isAvailable === "inStock"
-                  ? "In Stock"
-                  : "Out Of Stock"}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex gap-2 flex-col md:flex-row">
-            <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
-
-            <div className="flex flex-1  gap-3">
-              <Button
-                onClick={() => handleAddToCart(product?.id)}
-                className="bg-[#f97316] hover:bg-[#f97316]"
-                size="lg"
-                disabled={
-                  product?.isAvailable !== "inStock" || isLoading || buyLoading
-                }
-              >
-                {!buyLoading && isLoading && (
-                  <IconLoader className="animate-spin" size={17} />
-                )}
-                Add to Cart
-              </Button>
-
-              <Button
-                onClick={() => handleBuyNow(product?.id)}
-                variant="secondary"
-                size="lg"
-                disabled={buyLoading || product?.isAvailable !== "inStock"}
-                className="text-[#f97316]"
-              >
-                {buyLoading && (
-                  <IconLoader className="animate-spin" size={17} />
-                )}
-                Buy Now
-              </Button>
-            </div>
-          </div>
-
-          <ShareButtons shareUrl={shareUrl} />
-        </div>
+        {/* <PopularProduct /> */}
       </div>
-
-      <Tabs defaultValue="description" className="w-full">
-        <TabsList className="w-full justify-start">
-          <TabsTrigger value="description">Description</TabsTrigger>
-          <TabsTrigger value="details">Product Details</TabsTrigger>
-          {/* <TabsTrigger value="instructions">Care Instructions</TabsTrigger>
-          <TabsTrigger value="faq">FAQ</TabsTrigger> */}
-        </TabsList>
-
-        <TabsContent value="description">
-          <Preview value={product?.description} className={"text-base"} />
-        </TabsContent>
-        <TabsContent value="details">
-          <Preview value={product?.productDetails} />
-        </TabsContent>
-        {/* <TabsContent value="instructions">
-          <CareInstructions />
-        </TabsContent>
-        <TabsContent value="faq">
-          <ProductAccordion />
-        </TabsContent> */}
-      </Tabs>
-
       <RelatedProduct categoryId={product?.categoryId} />
-      {/* <PopularProduct /> */}
-    </div>
+    </>
   );
 };
 
