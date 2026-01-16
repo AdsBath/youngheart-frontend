@@ -10,9 +10,12 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { ChangeAdminPasswordDialog } from "@/features/admin/change-admin-password-dialog";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteAdminMutation } from "@/redux/api/userApi";
 import { onEditAdminOpen } from "@/redux/features/admin/adminSlice";
+import { useAdmin } from "@/context/AdminContext";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
@@ -23,6 +26,9 @@ interface DataTableRowActionsProps {
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
     const dispatch = useDispatch();
     const [deleteAdmin] = useDeleteAdminMutation();
+    const { user } = useAdmin();
+    const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
+    const isSuperAdmin = user?.role === "SUPER_ADMIN";
 
     const [ConfirmDialog, confirm] = useConfirm(
         "Are you sure ?",
@@ -41,6 +47,12 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
     return (
         <>
             <ConfirmDialog />
+            <ChangeAdminPasswordDialog
+                open={passwordDialogOpen}
+                onOpenChange={setPasswordDialogOpen}
+                adminId={row.original.id}
+                adminName={`${row.original.firstName} ${row.original.lastName}`}
+            />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
@@ -63,6 +75,19 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
                             <span>E</span>
                         </DropdownMenuShortcut>
                     </DropdownMenuItem>
+
+                    {/* Change Password - only for Super Admin */}
+                    {isSuperAdmin && (
+                        <DropdownMenuItem
+                            onClick={() => setPasswordDialogOpen(true)}
+                        >
+                            Change Password
+                            <DropdownMenuShortcut>
+                                <span>⌘</span>
+                                <span>P</span>
+                            </DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                    )}
 
                     {/* <DropdownMenuItem>Make a copy</DropdownMenuItem> */}
 

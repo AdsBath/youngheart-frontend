@@ -12,6 +12,7 @@ const productApi = baseApi.injectEndpoints({
         method: "GET",
         params,
       }),
+      keepUnusedDataFor: 300,
       providesTags: [tagTypes.product],
     }),
 

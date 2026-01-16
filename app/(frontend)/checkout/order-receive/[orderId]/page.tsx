@@ -2,13 +2,52 @@
 import Loading from "@/components/loding";
 import BlurImage from "@/components/ui/blur-image";
 import { useMyOrderByIdQuery } from "@/redux/api/orderApi";
+import { useProductsQuery } from "@/redux/api/productApi";
+import { trackPurchase } from "@/lib/ga4-events";
 import { IconCheck } from "@tabler/icons-react";
 import { format } from "date-fns";
+import { useEffect, useRef } from "react";
 
 const OrderReceivePage = ({ params }: { params: any }) => {
     const { orderId } = params;
     const { data: order, isLoading } = useMyOrderByIdQuery(orderId);
     const orderData = order?.data;
+    const { data: productsData } = useProductsQuery({});
+    const hasTrackedPurchase = useRef(false);
+
+    // Track purchase event when order data is available
+    useEffect(() => {
+        if (
+            orderData &&
+            productsData?.data?.data &&
+            !hasTrackedPurchase.current
+        ) {
+            const orderItems = orderData.orderItems || [];
+            const cartItems = orderItems.map((item: any) => ({
+                productId: item.productId || item.id,
+                price: item.price || 0,
+                quantity: item.quantity || 1,
+                discountAmmount: item.discountAmount || item.discountAmmount || 0,
+                color: item.color,
+                size: item.size,
+                product: item.product,
+            }));
+
+            trackPurchase(
+                orderData.orderId || orderData.id,
+                cartItems,
+                productsData.data.data,
+                {
+                    value: orderData.totalAmount || 0,
+                    tax: 0,
+                    shipping: orderData.shippingCharge || 0,
+                    coupon: orderData.coupon?.code || "",
+                }
+            );
+
+            hasTrackedPurchase.current = true;
+        }
+    }, [orderData, productsData]);
 
     return (
         <div className="container mx-auto min-h-[60vh] my-10">
@@ -266,7 +305,7 @@ const OrderReceivePage = ({ params }: { params: any }) => {
                                         <span className="text-sm">
                                             {" "}
                                             {orderData?.paymentMethod ===
-                                            "Online"
+                                                "Online"
                                                 ? "Bank"
                                                 : "Cash on delivery"}
                                         </span>
@@ -303,19 +342,19 @@ const OrderReceivePage = ({ params }: { params: any }) => {
                                 </li>
                                 {orderData?.shipToDifferentAddress
                                     ? orderData?.shipToDifferentAddress
-                                          ?.split(",")
-                                          ?.map(
-                                              (address: any, index: number) => (
-                                                  <li key={index}>{address}</li>
-                                              )
-                                          )
+                                        ?.split(",")
+                                        ?.map(
+                                            (address: any, index: number) => (
+                                                <li key={index}>{address}</li>
+                                            )
+                                        )
                                     : orderData?.billingAddress
-                                          ?.split(",")
-                                          ?.map(
-                                              (address: any, index: number) => (
-                                                  <li key={index}>{address}</li>
-                                              )
-                                          )}
+                                        ?.split(",")
+                                        ?.map(
+                                            (address: any, index: number) => (
+                                                <li key={index}>{address}</li>
+                                            )
+                                        )}
                             </ul>
                         </div>
                     </section>

@@ -103,6 +103,16 @@ const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.auth],
     }),
+
+    //change admin password (super admin only)
+    changeAdminPassword: build.mutation({
+      query: (data) => ({
+        url: `${AUTH_URL}/change-admin-password`,
+        method: "PATCH",
+        data: data,
+      }),
+      invalidatesTags: [tagTypes.auth],
+    }),
   }),
 });
 
@@ -117,4 +127,5 @@ export const {
   useChangePasswordMutation,
   useAdminForgetPasswordMutation,
   useSetPasswordMutation,
+  useChangeAdminPasswordMutation,
 } = authApi;

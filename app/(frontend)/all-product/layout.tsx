@@ -160,8 +160,8 @@ export default function SearchLayout({
                     <div className="flex flex-col gap-4 bg-white py-3 px-4 mb-2 rounded shadow-sm">
                         <h2 className="text-lg font-semibold">Categories</h2>
                         {productsLoading ||
-                        isLoading ||
-                        collectionsIsLoading ? (
+                            isLoading ||
+                            collectionsIsLoading ? (
                             Array(9)
                                 .fill(0)
                                 ?.map((_, index) => (
@@ -304,8 +304,8 @@ export default function SearchLayout({
                     <div className="flex flex-col gap-4 py-3 px-4 bg-white rounded shadow-sm">
                         <h2 className="text-lg font-semibold">Collections</h2>
                         {productsLoading ||
-                        isLoading ||
-                        collectionsIsLoading ? (
+                            isLoading ||
+                            collectionsIsLoading ? (
                             Array(4)
                                 .fill(0)
                                 ?.map((_, index) => (
@@ -326,11 +326,10 @@ export default function SearchLayout({
                                         className={"flex justify-between group"}
                                     >
                                         <button
-                                            className={`text-start opacity-90 group-hover:opacity-100 ${
-                                                collectionId === item.id
+                                            className={`text-start opacity-90 group-hover:opacity-100 ${collectionId === item.id
                                                     ? " text-brand"
                                                     : ""
-                                            }`}
+                                                }`}
                                         >
                                             {item.name}
                                         </button>
@@ -347,8 +346,8 @@ export default function SearchLayout({
                     <div className="flex flex-col gap-4 py-3 px-4 bg-white rounded shadow-sm">
                         <h2 className="text-lg font-semibold">Brands</h2>
                         {productsLoading ||
-                        isLoading ||
-                        collectionsIsLoading ? (
+                            isLoading ||
+                            collectionsIsLoading ? (
                             Array(4)
                                 .fill(0)
                                 ?.map((_, index) => (
@@ -369,7 +368,7 @@ export default function SearchLayout({
                                         className={
                                             "flex justify-between group" +
                                                 brandId ===
-                                            item.id
+                                                item.id
                                                 ? " text-brand"
                                                 : ""
                                         }

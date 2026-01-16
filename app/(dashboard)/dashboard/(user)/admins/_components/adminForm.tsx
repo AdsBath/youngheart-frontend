@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/custom/button";
+import { PasswordInput } from "@/components/custom/password-input";
 import ImageUpload from "@/components/imageUpload";
 import {
   Form,
@@ -35,6 +36,10 @@ const adminFormSchema = z.object({
   email: z.string().email().min(1, {
     message: "Email is required and must be a valid email address",
   }),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters long",
+  }).optional().or(z.literal('')),
+  confirmPassword: z.string().optional().or(z.literal('')),
   firstName: z.string().min(1, {
     message: "First Name is required",
   }),
@@ -42,7 +47,7 @@ const adminFormSchema = z.object({
     message: "Last Name is required",
   }),
   displayName: z.string().optional(),
-  image: z.string().url().optional(),
+  image: z.string().optional(),
   role: z
     .string()
     .min(1, {
@@ -55,6 +60,15 @@ const adminFormSchema = z.object({
   // partition: z.string().min(1, {
   //   message: "Partition is required",
   // }),
+}).refine((data) => {
+  // Only validate password match when creating new admin (no adminData)
+  if (data.password && data.password.length > 0) {
+    return data.password === data.confirmPassword;
+  }
+  return true;
+}, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
 });
 
 type AdminFormValues = z.infer<typeof adminFormSchema>;
@@ -85,6 +99,8 @@ export default function AdminRegForm({ adminData }: AdminDataFormValues) {
       status: adminData?.status || false,
       phone: adminData?.phone || "",
       email: adminData?.email || "",
+      password: "",
+      confirmPassword: "",
       role: adminData?.role || "",
       image: adminData?.image || "",
       firstName: adminData?.firstName || "",
@@ -98,6 +114,8 @@ export default function AdminRegForm({ adminData }: AdminDataFormValues) {
       status: adminData?.status || false,
       phone: adminData?.phone || "",
       email: adminData?.email || "",
+      password: "",
+      confirmPassword: "",
       role: adminData?.role || "",
       image: adminData?.image || "",
       firstName: adminData?.firstName || "",
@@ -109,9 +127,11 @@ export default function AdminRegForm({ adminData }: AdminDataFormValues) {
   async function onSubmit(data: Partial<AdminFormValues>) {
     setIsLoading(true);
     if (adminData?.id) {
+      // Exclude password fields when updating
+      const { password, confirmPassword, ...updateData } = data;
       const result = await updatedAdmin({
         id: adminData.id,
-        body: data,
+        body: updateData,
       }).unwrap();
       if (result?.success) {
         toast.success("Admin updated successfully.");
@@ -119,7 +139,14 @@ export default function AdminRegForm({ adminData }: AdminDataFormValues) {
       }
       return;
     } else {
-      const result = await createdAdmin(data).unwrap();
+      // Validate password for new admin
+      if (!data.password || data.password.length < 8) {
+        toast.error("Password is required and must be at least 8 characters long.");
+        setIsLoading(false);
+        return;
+      }
+      const { confirmPassword, ...createData } = data;
+      const result = await createdAdmin(createData).unwrap();
       if (result?.success) {
         toast.success("Admin created successfully.");
         form.reset();
@@ -136,9 +163,8 @@ export default function AdminRegForm({ adminData }: AdminDataFormValues) {
           name="status"
           render={({ field }) => (
             <FormItem
-              className={`flex flex-row items-center justify-between rounded-lg border p-4 ${
-                field.value ? "border-green-500" : "border-red-500"
-              }`}
+              className={`flex flex-row items-center justify-between rounded-lg border p-4 ${field.value ? "border-green-500" : "border-red-500"
+                }`}
             >
               <div className="space-y-0.5 ">
                 <FormLabel className="text-base">
@@ -160,9 +186,8 @@ export default function AdminRegForm({ adminData }: AdminDataFormValues) {
               </div>
               <FormControl>
                 <Switch
-                  className={`${
-                    field.value ? "data-[state=checked]:bg-green-500" : ""
-                  }`}
+                  className={`${field.value ? "data-[state=checked]:bg-green-500" : ""
+                    }`}
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
@@ -199,13 +224,47 @@ export default function AdminRegForm({ adminData }: AdminDataFormValues) {
                 />
               </FormControl>
               <FormDescription>
-                This email address will be used to log in to the admin panel. It
-                will also be used to send admin panel log in password.
+                This email address will be used to log in to the admin panel.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+        {/* Password fields - only show when creating new admin */}
+        {!adminData?.id && (
+          <div className="grid grid-cols-2 gap-3">
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Password <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <PasswordInput placeholder="********" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Confirm Password <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <PasswordInput placeholder="********" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )}
         {/* role */}
         <FormField
           control={form.control}

@@ -18,6 +18,24 @@ const initDataLayer = () => {
   }
 };
 
+const DEFAULT_EVENT_THROTTLE_MS = 1000;
+const eventThrottleMap: Map<string, number> = new Map();
+
+const shouldThrottleEvent = (
+  key: string,
+  throttleMs: number = DEFAULT_EVENT_THROTTLE_MS
+) => {
+  const now = Date.now();
+  const lastTime = eventThrottleMap.get(key) ?? 0;
+
+  if (now - lastTime < throttleMs) {
+    return true;
+  }
+
+  eventThrottleMap.set(key, now);
+  return false;
+};
+
 /**
  * Push event to dataLayer
  */
@@ -28,13 +46,29 @@ export const pushToDataLayer = (eventData: Record<string, unknown>) => {
 };
 
 /**
+ * Track pageview event with duplicate guard
+ */
+export const trackPageView = (page: string) => {
+  if (typeof window === "undefined" || !page) return;
+
+  const eventKey = `pageview:${page}`;
+  if (shouldThrottleEvent(eventKey, 500)) return;
+
+  pushToDataLayer({
+    event: "pageview",
+    page,
+  });
+};
+
+/**
  * Format product item for GA4 events
  */
 export const formatProductItem = (product: any, cartItem?: any) => {
-  const price = cartItem?.price || parseFloat(product?.price?.replace(/,/g, "") || "0");
+  const price =
+    cartItem?.price || parseFloat(product?.price?.replace(/,/g, "") || "0");
   const quantity = cartItem?.quantity || 1;
   const discount = cartItem?.discountAmmount || 0;
-  
+
   return {
     item_id: product?.sku || product?.id?.toString() || "",
     item_name: product?.name || "",
@@ -55,9 +89,9 @@ export const formatCartItems = (cartItems: any[], productsData?: any[]) => {
   if (!cartItems || cartItems.length === 0) return [];
 
   return cartItems.map((cartItem: any, index: number) => {
-    const product = productsData?.find(
-      (p: any) => p.id === cartItem.productId
-    ) || cartItem.product;
+    const product =
+      productsData?.find((p: any) => p.id === cartItem.productId) ||
+      cartItem.product;
 
     return {
       ...formatProductItem(product, cartItem),
@@ -71,12 +105,12 @@ export const formatCartItems = (cartItems: any[], productsData?: any[]) => {
  */
 export const calculateTotalValue = (cartItems: any[]) => {
   if (!cartItems || cartItems.length === 0) return 0;
-  
+
   return cartItems.reduce((total: number, item: any) => {
     const price = parseFloat(item.price || 0);
     const quantity = item.quantity || 1;
     const discount = item.discountAmmount || 0;
-    return total + (price * quantity) - discount;
+    return total + price * quantity - discount;
   }, 0);
 };
 
@@ -84,9 +118,17 @@ export const calculateTotalValue = (cartItems: any[]) => {
  * View Item Event - When user views product details
  */
 export const trackViewItem = (product: any) => {
+  if (!product) return;
+
+  const rawIdentifier =
+    product?.id?.toString() || product?.sku || product?.slug || product?.name;
+  const eventKey = `view_item:${rawIdentifier}`;
+
+  if (shouldThrottleEvent(eventKey, 1500)) return;
+
   const price = parseFloat(product?.price?.replace(/,/g, "") || "0");
-  const discountPrice = product?.discountPrice 
-    ? (price * parseFloat(product.discountPrice)) / 100 
+  const discountPrice = product?.discountPrice
+    ? (price * parseFloat(product.discountPrice)) / 100
     : 0;
   const finalPrice = price - discountPrice;
 
@@ -108,25 +150,32 @@ export const trackViewItem = (product: any) => {
  * Add to Cart Event - When user adds item to cart
  */
 export const trackAddToCart = (product: any, cartItem: any) => {
-  const price = parseFloat(cartItem?.price || product?.price?.replace(/,/g, "") || "0");
+  const price = parseFloat(
+    cartItem?.price || product?.price?.replace(/,/g, "") || "0"
+  );
   const discount = cartItem?.discountAmmount || 0;
   const quantity = cartItem?.quantity || 1;
-  const value = (price * quantity) - discount;
+  const value = price * quantity - discount;
 
   pushToDataLayer({
     event: "add_to_cart",
     currency: "BDT",
     value: value,
-    items: [
-      formatProductItem(product, cartItem),
-    ],
+    items: [formatProductItem(product, cartItem)],
   });
 };
 
 /**
  * Begin Checkout Event - When user starts checkout process
  */
-export const trackBeginCheckout = (cartItems: any[], productsData?: any[], coupon?: string) => {
+export const trackBeginCheckout = (
+  cartItems: any[],
+  productsData?: any[],
+  coupon?: string
+) => {
+  const eventKey = "begin_checkout";
+  if (shouldThrottleEvent(eventKey, 2000)) return;
+
   const items = formatCartItems(cartItems, productsData);
   const value = calculateTotalValue(cartItems);
 
@@ -231,18 +280,17 @@ export const trackViewCart = (cartItems: any[], productsData?: any[]) => {
  * Remove from Cart Event - When user removes item from cart
  */
 export const trackRemoveFromCart = (product: any, cartItem: any) => {
-  const price = parseFloat(cartItem?.price || product?.price?.replace(/,/g, "") || "0");
+  const price = parseFloat(
+    cartItem?.price || product?.price?.replace(/,/g, "") || "0"
+  );
   const discount = cartItem?.discountAmmount || 0;
   const quantity = cartItem?.quantity || 1;
-  const value = (price * quantity) - discount;
+  const value = price * quantity - discount;
 
   pushToDataLayer({
     event: "remove_from_cart",
     currency: "BDT",
     value: value,
-    items: [
-      formatProductItem(product, cartItem),
-    ],
+    items: [formatProductItem(product, cartItem)],
   });
 };
-

@@ -1,16 +1,17 @@
 "use client";
+
 import { FronLoginForm } from "@/components/frontend/auth/fron-login-form";
 import { FronRegisterForm } from "@/components/frontend/auth/fron-register-form";
 import MyAccountPage from "@/components/frontend/my-account/my-account-page";
-import Loading from "@/components/loding";
+// import Loading from "@/components/loding";
 import { useAuth } from "@/context/AuthContext";
 
 const MyAccount = () => {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
 
-  if (loading) {
-    return <Loading />;
-  }
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   return (
     <>

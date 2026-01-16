@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { trackPageView } from '@/lib/ga4-events';
 
 declare global {
   interface Window {
@@ -12,14 +13,16 @@ declare global {
 export default function GTMPageView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const search = useMemo(
+    () => searchParams?.toString() ?? "",
+    [searchParams]
+  );
 
   useEffect(() => {
-    const search = searchParams?.toString();
+    if (!pathname) return;
     const url = search ? `${pathname}?${search}` : pathname;
-    if (typeof window === 'undefined') return;
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event: 'pageview', page: url });
-  }, [pathname, searchParams]);
+    trackPageView(url);
+  }, [pathname, search]);
 
   return null;
 }

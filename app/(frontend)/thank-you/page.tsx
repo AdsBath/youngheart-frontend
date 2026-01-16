@@ -2,7 +2,7 @@
 
 import ThankYou from "./_components/thank-you";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import TrackAnimation from "./_components/animattion-car";
 import { useOrderQuery } from "@/redux/api/orderApi";
 import { useProductsQuery } from "@/redux/api/productApi";
@@ -15,6 +15,7 @@ const ThankYouPage = () => {
     skip: !orderId,
   });
   const { data: productsData } = useProductsQuery({});
+  const hasTrackedPurchase = useRef(false);
 
   useEffect(() => {
     const storedOrderId = JSON.parse(localStorage.getItem("orderId") || "null");
@@ -34,11 +35,12 @@ const ThankYouPage = () => {
       orderData?.data &&
       orderId &&
       productsData?.data?.data &&
-      orderData.data.orderItems
+      orderData.data.orderItems &&
+      !hasTrackedPurchase.current
     ) {
       const order = orderData.data;
       const orderItems = order.orderItems || [];
-      
+
       // Format cart items for tracking
       const cartItems = orderItems.map((item: any) => ({
         productId: item.productId || item.id,
@@ -61,6 +63,8 @@ const ThankYouPage = () => {
           coupon: order.coupon?.code || "",
         }
       );
+
+      hasTrackedPurchase.current = true;
     }
   }, [orderData, orderId, productsData]);
 

@@ -48,6 +48,7 @@ import { calculateDiscount } from "@/utils/calculateDiscount";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconCash, IconLoader } from "@tabler/icons-react";
 import { format } from "date-fns";
+import { useRef } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -139,6 +140,15 @@ export default function CheckoutForm({
     useApplyCouponMutation();
   const router = useRouter();
   const cart = cartData?.data;
+  const cartItems = useMemo(() => {
+    if (!cart?.cartItems?.length) return [];
+    return cart.cartItems.map((cartItem: any) => {
+      const product = productsData?.data?.data?.find(
+        (product: any) => product.id === cartItem.productId
+      );
+      return { ...cartItem, product };
+    });
+  }, [cart?.cartItems, productsData?.data?.data]);
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
@@ -169,7 +179,7 @@ export default function CheckoutForm({
   const district = watchValues.district;
   const dDistrict = watchValues.dDistrict;
 
-  const hasFreeShipping = cart?.cartItems.some((item: any) => {
+  const hasFreeShipping = cartItems.some((item: any) => {
     return item.product?.shippingRules?.shippingCost === 0;
   });
 
@@ -198,7 +208,6 @@ export default function CheckoutForm({
       district &&
       watchValues.address &&
       watchValues.city &&
-      cartItems &&
       cartItems.length > 0 &&
       productsData?.data?.data
     ) {
@@ -232,21 +241,16 @@ export default function CheckoutForm({
       (upazilaItem: ICity) => upazilaItem.district_id === dDistrictData?.id
     );
   }
-  const cartItems = cart?.cartItems?.map((cartItem: any) => {
-    const product = productsData?.data?.data?.find(
-      (product: any) => product.id === cartItem.productId
-    );
-    return { ...cartItem, product };
-  });
-
   // Track begin_checkout event when checkout page loads
+  const hasTrackedCheckout = useRef(false);
   useEffect(() => {
-    if (cartItems && cartItems.length > 0 && productsData?.data?.data) {
+    if (cartItems.length > 0 && productsData?.data?.data && !hasTrackedCheckout.current) {
       trackBeginCheckout(
         cartItems,
         productsData.data.data,
         couponCode || undefined
       );
+      hasTrackedCheckout.current = true;
     }
   }, [cartItems, productsData, couponCode]);
 
@@ -548,9 +552,9 @@ export default function CheckoutForm({
                                   >
                                     {field.value
                                       ? districts.find(
-                                          (district) =>
-                                            district.name === field.value
-                                        )?.name
+                                        (district) =>
+                                          district.name === field.value
+                                      )?.name
                                       : "Select district"}
                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                   </Button>
@@ -621,9 +625,9 @@ export default function CheckoutForm({
                                 >
                                   {field.value
                                     ? upazilaData.find(
-                                        (upazila) =>
-                                          upazila.name === field.value
-                                      )?.name
+                                      (upazila) =>
+                                        upazila.name === field.value
+                                    )?.name
                                     : "Select city"}
                                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
@@ -863,9 +867,9 @@ export default function CheckoutForm({
                                     >
                                       {field.value
                                         ? districts.find(
-                                            (district) =>
-                                              district.name === field.value
-                                          )?.name
+                                          (district) =>
+                                            district.name === field.value
+                                        )?.name
                                         : "Select district"}
                                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
@@ -940,9 +944,9 @@ export default function CheckoutForm({
                                   >
                                     {field.value
                                       ? dUpazilaData.find(
-                                          (upazila) =>
-                                            upazila.name === field.value
-                                        )?.name
+                                        (upazila) =>
+                                          upazila.name === field.value
+                                      )?.name
                                       : "Select city"}
                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                   </Button>
@@ -1065,7 +1069,7 @@ export default function CheckoutForm({
                       ৳{" "}
                       {item.discount
                         ? calculateDiscount(item.price, item.discount) *
-                          item.quantity
+                        item.quantity
                         : parseFloat(item.price) * item.quantity}
                     </p>
                   </div>

@@ -28,7 +28,7 @@ import { IconLoader } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 
-interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> { }
 
 const formSchema = z.object({
   email: z.string().optional(),
@@ -138,7 +138,7 @@ export function FronLoginForm({ className, ...props }: UserAuthFormProps) {
                 <FormItem className="space-y-1">
                   <FormLabel>Email or Phone</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} placeholder="Enter your email or phone" />
                   </FormControl>
                   <FormMessage />
                   {errorMessage && (

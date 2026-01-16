@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 // Generic fetch helper with graceful failure (no console noise on server)
 async function fetchData<T = any>(path: string): Promise<T | null> {
   try {
-    const res = await fetch(`${BASE_URL}${path}`, { next: { revalidate: 30 } });
+    const res = await fetch(`${BASE_URL}${path}`, { next: { revalidate: 60 * 1000 } }); 
     if (!res.ok) return null;
     return (await res.json()) as T;
   } catch {

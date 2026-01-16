@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProductsQuery } from "@/redux/api/productApi";
@@ -13,17 +15,29 @@ const AllProducts = ({
     searchValue: string;
     collection: string;
 }) => {
+    const productParams = useMemo(() => {
+        const params: Record<string, string> = {};
+
+        if (searchValue) params.q = searchValue;
+        if (collection) params.collection = collection;
+
+        return params;
+    }, [collection, searchValue]);
+
     const {
         data: productsData,
         isLoading: productsLoading,
         isFetching,
-    } = useProductsQuery({
-        q: searchValue,
-        collection,
+    } = useProductsQuery(productParams, {
+        refetchOnMountOrArgChange: false,
+        refetchOnReconnect: false,
+        refetchOnFocus: false,
     });
 
     const products = productsData?.data?.data;
-    const { data: collectionData } = useProductCollectionQuery(collection);
+    const { data: collectionData } = useProductCollectionQuery(collection, {
+        skip: !collection,
+    });
 
     if (productsLoading || isFetching) {
         return (
@@ -46,6 +60,7 @@ const AllProducts = ({
             </div>
         );
     }
+
     return (
         <div>
             <div className="py-3 px-3 bg-white rounded w-full">

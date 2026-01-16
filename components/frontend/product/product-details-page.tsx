@@ -52,8 +52,8 @@ const ProductDetails = ({ product }: { product: any }) => {
       discountAmmount:
         parseFloat(product?.discountPrice) > 0
           ? (parseFloat(removeCommas(product?.price)) *
-              parseFloat(product?.discountPrice)) /
-            100
+            parseFloat(product?.discountPrice)) /
+          100
           : 0,
       discount:
         parseFloat(product?.discountPrice) > 0
@@ -90,8 +90,8 @@ const ProductDetails = ({ product }: { product: any }) => {
       discountAmmount:
         parseFloat(product?.discountPrice) > 0
           ? (parseFloat(removeCommas(product?.price)) *
-              parseFloat(product?.discountPrice)) /
-            100
+            parseFloat(product?.discountPrice)) /
+          100
           : 0,
       discount:
         parseFloat(product?.discountPrice) > 0
@@ -155,7 +155,7 @@ const ProductDetails = ({ product }: { product: any }) => {
   return (
     <>
       <div className="container px-0">
-        <div className="flex flex-col md:flex-row my-10">
+        <div className="flex flex-col md:flex-row ">
           <div className="h-full w-full basis-full lg:basis-4/6 ">
             <Suspense fallback={<div className="aspect-square h-full" />}>
               <Gallery
@@ -170,8 +170,8 @@ const ProductDetails = ({ product }: { product: any }) => {
             </Suspense>
           </div>
 
-          <div className="md:w-1/2 md:pl-8 mt-4 md:mt-0 px-2">
-            <h1 className="text-xl md:text-3xl font-bold mb-2">
+          <div className="md:w-1/2 md:pl-8 mt-4 md:mt-10 px-2">
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">
               {product?.name}
             </h1>
             <p className="text-gray-700 mb-4 text-sm">
